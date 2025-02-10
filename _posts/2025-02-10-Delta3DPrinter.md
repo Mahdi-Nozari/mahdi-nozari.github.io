@@ -9,4 +9,4 @@ image: /personalwebpage/images/Delta3DPrinter1.JPG
 description: "A part of a bigger project for the digitization of the manufacturing process of braces for children with scoliosis"
 ---
 
-This was a project.
+![Delta3DPrinter](/personalwebpage/images/Delta3DPrinter.JPG)

@@ -5,7 +5,7 @@ type: "Projects"
 order: 7
 # categories: [Projects]
 # tags: [Projects]
-image: /personalwebpage/images/NMDIsorders.PNG
+image: /personalwebpage/images/NMDisorders.PNG
 description: ""
 ---
 
