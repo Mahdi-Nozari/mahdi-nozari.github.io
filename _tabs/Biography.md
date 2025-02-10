@@ -4,6 +4,8 @@ icon: fa-solid fa-user
 order: 1
 ---
 
+Download my complete CV [here](https://drive.google.com/file/d/1-9RF-T1q85kiJM2v2XscDh7Z-xQNxjtt/view?usp=drive_link)
+
 ## 🎓 Education
 
 - **MSc in Mechanical Engineering**, *University of Tehran* (Since Oct 2022)  
