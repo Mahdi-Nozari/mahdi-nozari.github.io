@@ -7,7 +7,8 @@ order: 2
 Here are my selected project. Please take a look...
 
 <ul>
-{% for post in site.posts %}
+{% assign sorted_posts = site.posts | sort: 'order' %}
+{% for post in sorted_posts %}
   {% if post.type == "Projects" %}
     <div class="post">
       <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
