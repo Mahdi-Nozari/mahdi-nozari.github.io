@@ -8,31 +8,25 @@ Download my complete CV [here](https://drive.google.com/file/d/1-9RF-T1q85kiJM2v
 
 ## 🎓 Education
 
-- **MSc in Mechanical Engineering**, *University of Tehran* (Since Oct 2022)  
-  **Thesis:** "Development and Movement Control of a Rolling Soft Polyhedral Robot"  
-  Advisors: Dr. Aghil Yousefi Koma, Dr. Ali Alazmani (University of Leeds)
-
-- **BSc in Mechanical Engineering**, *Iran University of Science and Technology* (Oct 2021)  
-  **Award:** ‘Best BSc Thesis of 2021’ by ISME
-
+- **MSc in Mechanical Engineering**, *University of Tehran* (Expected 2025)  
+- **BSc in Mechanical Engineering**, *Iran University of Science and Technology* (2021)  
 ---
 
 ## 💼 Work Experience
 
 - **Research Assistant** | *University of Tehran* (Oct 2022 - Present)  
-  Supervisor of robotics division, project manager, and mentor.
+  Researcher, Supervisor of the robotics division, Project manager, Mentorship of undergrad students.
 
-- **Mechanical Engineer** | *Mashal Pouya Apadana* (Dec 2023 - Oct 2024)  
-  Mechanical design and development for oil and petroleum measurement devices.
+- **Mechanical Engineer** | *Mashal Pouya* (Dec 2023 - Oct 2024)  
+  Mechanical design and development of fluid flow measurement devices.
 
 - **Research Assistant** | *Iran University of Science and Technology* (Sep 2019 - Oct 2022)  
-  Design and fabrication of mechanical and mechatronic devices.
-
+  Design and fabrication of mechanical and mechatronic biomedical devices
 ---
 
 ## 🛠️ Skills
 
-- **Software:** SolidWorks, Matlab, Simulink, Python, C++, Abaqus, Arduino  
+- **Software:** SolidWorks, Matlab, Simulink, Python, C++, Abaqus, Arduino, OpenSim, Raspberry Pi, Latex
 - **Languages:**  
   - **English:** Fluent (IELTS: 8.0)  
   - **Persian:** Native

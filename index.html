@@ -1,4 +1,107 @@
 ---
-layout: home
+layout: page
 # Index page
 ---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mahdi Nozari | Homepage</title>
+    <link rel="icon" href="https://morphitcdn.netlify.app/personalwebpage/images/robot-solid.JPG" type="image/x-icon">
+    <style>
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        .tile {
+            position: relative;
+            overflow: hidden;
+            height: 200px; /* Fixed height for consistency */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .tile img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensures images autofit while maintaining aspect ratio */
+            transition: transform 0.3s ease-in-out;
+        }
+        .tile:hover img {
+            transform: scale(1.1);
+        }
+        .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .tile:hover .overlay {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>I like to explore and create...</h1>
+
+    <p>
+        I am a mechanical engineer with expertise in robotic and mechatronic systems. I have studied for my BSc at the Iran University
+         of Science and Technology (IUST) and my MSc at the University of Tehran. My research interests include control systems, robotics
+          and soft robotics, mechatronics, mechanical design, and soft sensors. My passion for research and my interest in experimental 
+          studies have always pushed me to pursue my studies with practicality in mind. I have always believed that man's ability is only
+           limited to his technologies, and my vision is to use the knowledge I have gained in my experiences to make an impact in the 
+           healthcare industry, to research novel biomedical devices.
+    </p>
+
+    <p>
+        In my professional career as a researcher, I have been a part of some of the best teams I had access to. I have been proud to
+         be a part of the Biomechatronic and Cognitive Engineering laboratory (BACE) at IUST, the Center of Advanced Systems and 
+         Technologies at the University of Tehran, and I have collaborated with the Healthcare Mechatronics laboratory at the University
+          of Leeds.
+    </p>
+
+    <p>
+        My passion to build is what defines me. I not only strive to study theory, but I am eager to use the theoretical knowledge to produce 
+        tangible results. Please take a look at my projects to get familiar with my expertise and my interests.
+    </p>
+
+    <h2>Gallery</h2>
+        <div class="gallery">
+        <div class="tile">
+            <img src="https://morphitcdn.netlify.app/personalwebpage/images/MahdiNozariCast.JPG" alt="Pic1">
+            <div class="overlay">CAST, University of Tehran</div>
+        </div>
+        <div class="tile">
+            <img src="https://morphitcdn.netlify.app/personalwebpage/images/MahdiNozari2.JPG" alt="Pic2">
+            <div class="overlay">Working on the SURENA V humanoid</div>
+        </div>
+        <div class="tile">
+            <img src="https://morphitcdn.netlify.app/personalwebpage/images/BScDevice3.JPG" alt="Pic3">
+            <div class="overlay">My workshop</div>
+        </div>
+        <div class="tile">
+            <img src="https://morphitcdn.netlify.app/personalwebpage/images/Desk1.JPG" alt="Pic4">
+            <div class="overlay">My 3D printers at work</div>
+        </div>
+        <div class="tile">
+            <img src="https://morphitcdn.netlify.app/personalwebpage/images/MahdiNozari3.JPG" alt="Pic5">
+            <div class="overlay">ICROM 2023 Conference</div>
+        </div>
+        <div class="tile">
+            <img src="https://morphitcdn.netlify.app/personalwebpage/images/MahdiNozari4.JPG" alt="Pic6">
+            <div class="overlay">Before my last MSc exam...</div>
+        </div>
+    </div>
+
+
+</body>
+</html>
