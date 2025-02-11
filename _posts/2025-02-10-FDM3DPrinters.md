@@ -1,7 +1,7 @@
 ---
 title: "Designing and Building FDM 3D Printers"
 date: 2025-02-10 00:00:00 +0350+
-type: "Projects"
+# type: "Projects"
 order: 10
 # categories: [Projects]
 # tags: [Projects]
@@ -10,3 +10,6 @@ description: ""
 ---
 
 As I have been passionate about making, I have always liked tools. I try to gather different tools so I can complete my projects more effectively. 3D printers have been an important part of my journey, and I have enjoyed designing and making them, as well as using them for my projects. Here are shown the 3D printers I have made so far. Please also visit the page for the large-scale delta printer I have made!
+![Abaqus](/personalwebpage/images/MScAbaqus.PNG)
+![Abaqus](/personalwebpage/images/MScAbaqus.PNG)
+![Abaqus](/personalwebpage/images/MScAbaqus.PNG)
