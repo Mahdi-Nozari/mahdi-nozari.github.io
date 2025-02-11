@@ -8,9 +8,9 @@ Download my complete CV [here](https://drive.google.com/file/d/1-9RF-T1q85kiJM2v
 
 ## 🎓 Education
 
-- **MSc in Mechanical Engineering**, *University of Tehran* (Expected 2025) 
-
+- **MSc in Mechanical Engineering**, *University of Tehran* (Expected 2025)
 - **BSc in Mechanical Engineering**, *Iran University of Science and Technology* (2021)  
+
 ---
 
 ## 💼 Work Experience
@@ -22,7 +22,15 @@ Download my complete CV [here](https://drive.google.com/file/d/1-9RF-T1q85kiJM2v
   Mechanical design and development of fluid flow measurement devices.
 
 - **Research Assistant** | *Iran University of Science and Technology* (Sep 2019 - Oct 2022)  
-  Design and fabrication of mechanical and mechatronic biomedical devices
+  Design and fabrication of mechanical and mechatronic biomedical devices  
+
+---
+## Awards and Honors
+
+- **Best BSc Thesis of 2021** by the Iranian Society of Mechanical Engineers (ISME)
+- **Finalist of the Best Paper Award** at ICROM 2024
+- **Among the 10% top Students** during MSc studies at the University of Tehran
+
 ---
 
 ## 🛠️ Skills
