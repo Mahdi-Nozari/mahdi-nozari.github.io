@@ -5,7 +5,7 @@ type: "Projects"
 order: 7
 # categories: [Projects]
 # tags: [Projects]
-image: /personalwebpage/images/GraspSpherePower.PNG
+image: /personalwebpage/images/GraspSpherePower.JPG
 description: "Using static optimization models to predict muscle force distribution in human hand disorders"
 ---
 ![Desktop View](/personalwebpage/images/NMDisorders.PNG){: width="972" height="589" .w-50 .right}
