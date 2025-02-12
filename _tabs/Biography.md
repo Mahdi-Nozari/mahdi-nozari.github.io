@@ -25,7 +25,16 @@ Download my complete CV [here](https://drive.google.com/file/d/1-9RF-T1q85kiJM2v
   Design and fabrication of mechanical and mechatronic biomedical devices  
 
 ---
-## Awards and Honors
+## 🎓 Teaching Experince
+
+- **Teaching Assistant** – University of Tehran & IUST  
+  - *Mechatronics, Measurement Systems, Automatic Control*  
+- **Mechatronics Instructor** – Pars Pajouhaan Institute, Tehran (2020 - 2024)  
+- **3D Printing Instructor** – Iran University of Science and Technology (Aug 2023 - Sep 2023)  
+- **English Instructor** – Sahand & Tara English Institute (2017 - 2022)  
+
+---
+## 🏆 Awards and Honors
 
 - **Best BSc Thesis of 2021** by the Iranian Society of Mechanical Engineers (ISME)
 - **Finalist of the Best Paper Award** at ICROM 2024
