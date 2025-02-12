@@ -31,6 +31,7 @@ This team is led by Prof. Shahbazi at the Iran University of Science and Technol
 ---
 
 ## Scientific Society of Mechanical Engineering at IUST
+The SSME is a team consisting of passionate students who try to make the academic place a little more favorable. The members are volenteers, and the only goal is to help all student experience a better environment.
 ![Team 3](/personalwebpage/images/SSMEIUST.jpg)  
 <p align="center"><i>Glider competition organized by the SSME</i></p>
 
