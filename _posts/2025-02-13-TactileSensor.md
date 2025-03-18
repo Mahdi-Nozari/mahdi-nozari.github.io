@@ -1,7 +1,7 @@
 ---
 title: "Silicon Rubber Tactile Sensor"
 date: 2025-02-10 00:00:00 +0350+
-type: "Projects"
+type: ""
 order: 11
 # categories: [Projects]
 # tags: [Projects]

@@ -8,8 +8,10 @@ I have participated in various teams throughout my career and volunteer work. Be
 ---
 ## SURENA V Humanoid Robot Team
 One of the most renowned robotic teams in Iran, this team is based in the Center of Advanced Systems and Technologies (CAST) led by Prof. Yousefi-Koma. The team has developed 6 humanoid robots until now and is working on the next robot, which is the last and most advanced humanoid of the SURENA series. The robot is named after an Iranian legendary hero, and it is designed with its own personality. This robot introduces novel controllers, machine vision for the robot to have environmental perception, and AI algorithms to make the robot intelligent.
-Due to my hands-on experience, my main role in this team is to design and build parts for the robot and to maintain and repair the robot. I work with 3D printers and CNC machines to produce parts and assemble different sections. I have also collaborated on a couple of publications on the research conducted on the robot.- Bazrafshani, M. A., Yousefi-Koma, A., Amani, A., Maleki, B., Batmani, S., Ardakani, A. D., Taheri, S., Yazdankhah, P., **Nozari, M.**, Mozayyan, A., Naeini, A., Shafiee, M., and Vedadi, A. (2024)  
-- *Surena-V: A Humanoid Robot for Human-Robot Collaboration with Optimization-based Control Architecture.*  
+Due to my hands-on experience, my main role in this team is to design and build parts for the robot and to maintain and repair the robot. I work with 3D printers and CNC machines to produce parts and assemble different sections. I have also collaborated on a couple of publications on the research conducted on the robot.
+
+- Bazrafshani, M. A., Yousefi-Koma, A., Amani, A., Maleki, B., Batmani, S., Ardakani, A. D., Taheri, S., Yazdankhah, P., **Nozari, M.**, Mozayyan, A., Naeini, A., Shafiee, M., and Vedadi, A. (2024)  
+‍ *Surena-V: A Humanoid Robot for Human-Robot Collaboration with Optimization-based Control Architecture.*  
   In **Proceedings of the 2024 IEEE-RAS 23rd International Conference on Humanoid Robots (Humanoids)**.  
   [Link to Paper](https://ieeexplore.ieee.org/abstract/document/10769592)
 - Vedadi, A., Yousefi-Koma, A., Shariat-Panahi, M., and **Nozari, M.** (2023)  
