@@ -12,5 +12,4 @@
 *.jpg binary
 *.ico binary
 *.zipglb filter=lfs diff=lfs merge=lfs -text
-*.glb filter=lfs diff=lfs merge=lfs -text
 RobotFullAssembly.glb filter=lfs diff=lfs merge=lfs -text
