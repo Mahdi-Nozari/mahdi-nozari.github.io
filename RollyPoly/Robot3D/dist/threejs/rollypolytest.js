@@ -64,8 +64,8 @@ let box;
 let model = null;
 let fadingParts = [];
 const loader = new GLTFLoader();
-const modelUrl = 'https://cdn.jsdelivr.net/gh/Mahdi-Nozari/mahdi-nozari.github.io@main/RollyPoly/Robot3D/dist/3dmodels/RobotFullAssembly.glb';
-
+loader.setCrossOrigin('anonymous');
+const modelUrl = "https://github.com/Mahdi-Nozari/mahdi-nozari.github.io/releases/download/V1.0.0/RobotFullAssembly.glb";
 loader.load(modelUrl, function(gltf){
     model = gltf.scene;
     model.scale.set(25, 25, 25);
