@@ -65,6 +65,9 @@ let model = null;
 let fadingParts = [];
 const loader = new GLTFLoader();
 loader.setCrossOrigin('anonymous');
+fetch("https://github.com/Mahdi-Nozari/mahdi-nozari.github.io/releases/download/V1.0.0/RobotFullAssembly.glb")
+  .then(r => r.text())
+  .then(t => console.log(t.slice(0, 200)));
 const modelUrl = "https://github.com/Mahdi-Nozari/mahdi-nozari.github.io/releases/download/V1.0.0/RobotFullAssembly.glb?raw=true";
 loader.load(modelUrl, function(gltf){
     model = gltf.scene;
