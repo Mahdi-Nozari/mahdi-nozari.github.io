@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Rolling Soft Polyhedral Robot</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css">
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+
+		<script type="importmap">
+		{
+			"imports": {
+				"three": "https://cdn.jsdelivr.net/npm/three@0.179.1/build/three.module.js",
+				"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.179.1/examples/jsm/"
+			}
+		}
+		</script>
+
+		<style>
+		html, body {
+			height: 100%;
+			margin: 0;
+			padding: 0;
+			overflow: hidden;
+		}
+		.reveal, .slides, section {
+			background: transparent !important;
+			height: 100%;
+			width: 100%;
+			margin: 0;
+			padding: 0;
+		}
+		#threeCanvas {
+			position: fixed !important;
+			top: 0 !important;
+			left: 0 !important;
+			width: 100vw !important;
+			height: 100vh !important;
+			z-index: 10 !important;
+			pointer-events: auto !important;
+		}
+		section > h1, section > h2, section > h3, section > p, section > div {
+			position: relative;
+			z-index: 2;
+			color: white;
+			text-align: center;
+			margin-top: 40vh;
+		}
+		.tiny-text {
+			font-size: 0.5em;
+			margin-top: 1em;
+			opacity: 0.7;
+		}
+		</style>
+	</head>
+
+	<body>
+		<canvas id="threeCanvas" style="width: 100%; height: 100%; display:block;"></canvas>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<p>Rolling Soft Polyhedral Robot</p>
+					<p class="tiny-text">Feel free to rotate and zoom</p>
+					<p class="tiny-text">→ Go to the next slide to see the inside of the robot!</p>
+				</section>
+				<section>
+					<p>Rolling Soft Polyhedral Robot</p>
+				</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			Reveal.initialize({
+				hash: true,
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+
+		<script type="module" src="threejs/rollypolytest.js"></script>
+	</body>
+</html>
