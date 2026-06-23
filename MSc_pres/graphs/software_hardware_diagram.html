@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500&family=Vazirmatn:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:110%; height:100%; background:transparent; }
+svg { width:100%; height:100%; display:block; }
+
+.crt-glow { fill:none; stroke:#00d4ff; stroke-width:6; stroke-opacity:.14; filter:url(#blur); }
+.crt-core { fill:none; stroke:#00d4ff; stroke-width:1.5; stroke-opacity:.90; }
+.dash-glow { fill:none; stroke:#00d4ff; stroke-width:5; stroke-opacity:.12; stroke-dasharray:6 5; filter:url(#blur); }
+.dash-core { fill:none; stroke:#00d4ff; stroke-width:1.5; stroke-opacity:.88; stroke-dasharray:6 5; }
+
+@keyframes techAppear { 0%{opacity:0} 38%{opacity:.7} 52%{opacity:.15} 70%{opacity:.9} 100%{opacity:1} }
+@keyframes fadeIn     { from{opacity:0} to{opacity:1} }
+
+#g-software,#g-hardware,#g-arrow-sh,#g-bus,
+#g-box-frame,#g-items-frame,
+#g-box-pneum,#g-items-pneum,
+#g-box-elec,#g-items-elec,
+#g-box-ctrl,#g-items-ctrl { opacity:0; }
+</style>
+</head>
+<body>
+<!--
+  Layout (ViewBox 1010×535):
+  ────────────────────────────────────────────────────────────────
+  Software box    x=35  y=80  w=220 h=400  cx=145 cy=280  (title y=65)
+  Hardware circle  cx=480 cy=280 r=95                      (title y=172)
+  "Path sequence" label centered above the dashed link, midpoint (320,280)
+
+  Component rows — tightened to 120px spacing, still centered on
+  Hardware's cy=280:
+    Robot Frame   cy=100   (100+460)/2 = 280 ✓
+    Pneumatics    cy=220   (220+340)/2 = 280 ✓
+    Electronics   cy=340
+    Control       cy=460
+
+  Bus vertical line spans the outer rows: x=620, y=100..460
+
+  Item lists are Persian (Vazirmatn font), right-anchored at x=945 with
+  direction="rtl" so they read correctly and stay clear of the box edge
+  (box right edge = 800, ~140px of clearance for short phrases).
+
+  HOW TO EDIT THE ITEM-LIST DELAY:
+  The full graph (Software, Hardware, bus, all 4 boxes) appears first.
+  Once it's fully done, ALL FOUR item lists fade in together after one
+  pause. To change that pause, edit a single number near the top of
+  the <script> block at the bottom of this file:
+      var ITEMS_DELAY_AFTER_GRAPH = 1000;   // milliseconds
+  ────────────────────────────────────────────────────────────────
+-->
+<svg viewBox="0 0 1010 535" xmlns="http://www.w3.org/2000/svg"
+     preserveAspectRatio="xMidYMid meet">
+<defs>
+  <filter id="blur" x="-400%" y="-400%" width="900%" height="900%">
+    <feGaussianBlur stdDeviation="3" in="SourceGraphic"/>
+  </filter>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5"
+          markerWidth="5.5" markerHeight="5.5" orient="auto">
+    <path d="M1,1.5 L9,5 L1,8.5 Z" fill="#00d4ff"/>
+  </marker>
+  <marker id="ah-purple" viewBox="0 0 10 10" refX="9" refY="5"
+          markerWidth="5.5" markerHeight="5.5" orient="auto">
+    <path d="M1,1.5 L9,5 L1,8.5 Z" fill="#b870e8"/>
+  </marker>
+</defs>
+
+
+<!-- ═══ SOFTWARE (enlarged) ═══ -->
+<g id="g-software">
+  <text x="25" y="110" text-anchor="middle"
+        font-family="'Rubik',sans-serif" font-weight="500" font-size="16" fill="#00d870">
+    Software
+  </text>
+  <rect x="-200" y="130" width="450" height="300" rx="8"
+        fill="#020e05" stroke="#00a860" stroke-width="1.5"/>
+
+  <!-- Autoplay video, no controls. Vite serves files inside /public at the
+       root URL with the "public" segment stripped — so a file saved at
+       public/media/software.mp4 is reached at /media/software.mp4,
+       NOT /public/media/software.mp4. -->
+  <foreignObject x="-195" y="130" width="440" height="290">
+    <video xmlns="http://www.w3.org/1999/xhtml"
+           src="/media/software.mp4"
+           autoplay muted loop playsinline
+           style="width:100%; height:100%; object-fit:contain;">
+    </video>
+  </foreignObject>
+</g>
+
+<!-- ═══ HARDWARE (enlarged, empty hub) ═══ -->
+<g id="g-hardware">
+  <text x="480" y="172" text-anchor="middle"
+        font-family="'Rubik',sans-serif" font-weight="500" font-size="16" fill="#8ad8ff">
+    Hardware
+  </text>
+  <circle cx="480" cy="280" r="95" fill="#020810" stroke="#00d4ff" stroke-width="1.8"/>
+</g>
+
+<!-- Software → Hardware: dashed (abstraction / non-physical link) -->
+<g id="g-arrow-sh">
+  <path class="dash-glow" d="M255,280 L385,280"/>
+  <path class="dash-core" d="M255,280 L385,280" marker-end="url(#ah)"/>
+  <text x="320" y="266" text-anchor="middle"
+        font-family="'Rubik',sans-serif" font-weight="500" font-size="11" fill="#7ab0cc">
+    Path sequence
+  </text>
+</g>
+
+<!-- ═══ BUS (Hardware fan-out backbone) ═══ -->
+<g id="g-bus">
+  <path class="crt-glow" d="M575,280 L620,280"/>
+  <path class="crt-core" d="M575,280 L620,280"/>
+  <path class="crt-glow" d="M620,100 L620,460"/>
+  <path class="crt-core" d="M620,100 L620,460"/>
+  <circle cx="620" cy="280" r="4"   fill="#00d4ff" opacity="0.8" filter="url(#blur)"/>
+  <circle cx="620" cy="280" r="2.5" fill="#00d4ff"/>
+</g>
+
+
+<!-- ═══ ROBOT FRAME (cy=100) ═══ -->
+<g id="g-box-frame">
+  <path class="crt-glow" d="M620,100 L680,100"/>
+  <path class="crt-core" d="M620,100 L680,100" marker-end="url(#ah)"/>
+  <text x="740" y="45" text-anchor="middle"
+        font-family="'Rubik',sans-serif" font-weight="500" font-size="14" fill="#9aacc0">
+    Robot Frame
+  </text>
+  <rect x="680" y="58" width="120" height="84" rx="8"
+        fill="#0a1018" stroke="#7888a0" stroke-width="1.5"/>
+  <polygon points="766,100 753,122.5 727,122.5 714,100 727,77.5 753,77.5"
+           fill="none" stroke="#9aacc0" stroke-width="1.6"/>
+  <path d="M766,100 L727,122.5 L727,77.5 Z" fill="none" stroke="#9aacc0" stroke-width="1.2"/>
+</g>
+<g id="g-items-frame">
+  <text x="945" text-anchor="start" direction="rtl" lang="fa"
+        font-family="'Vazirmatn',sans-serif" font-weight="500" font-size="17" fill="#9aacc0">
+    <!-- <tspan x="970" y="82">– طراحی ماژولار</tspan>
+    <tspan x="970" y="100">– پایداری غیرفعال</tspan>
+    <tspan x="970" y="118">– حرکت غلتشی مناسب</tspan> -->
+    <tspan x="970" y="105" font-weight="700">– هندسه چندوجهی</tspan>
+  </text>
+</g>
+
+
+<!-- ═══ PNEUMATICS (cy=220) ═══ -->
+<g id="g-box-pneum">
+  <path class="crt-glow" d="M620,220 L680,220"/>
+  <path class="crt-core" d="M620,220 L680,220" marker-end="url(#ah)"/>
+  <text x="740" y="165" text-anchor="middle"
+        font-family="'Rubik',sans-serif" font-weight="500" font-size="14" fill="#e8a828">
+    Pneumatics
+  </text>
+  <rect x="680" y="178" width="120" height="84" rx="8"
+        fill="#150e02" stroke="#c89018" stroke-width="1.5"/>
+  <polygon points="716,206 716,234 740,220" fill="none" stroke="#e8a828" stroke-width="2" stroke-linejoin="round"/>
+  <polygon points="764,206 764,234 740,220" fill="none" stroke="#e8a828" stroke-width="2" stroke-linejoin="round"/>
+</g>
+<g id="g-items-pneum">
+  <text x="945" text-anchor="start" direction="rtl" lang="fa"
+        font-family="'Vazirmatn',sans-serif" font-weight="300" font-size="15" fill="#e8a828">
+    <!-- <tspan x="970" y="202">– پمپ‌ها و شیر‌ها</tspan>
+    <tspan x="970" y="220">– قطعات مینیاتوری</tspan> -->
+    <tspan x="970" y="220" font-weight="700">– محرک‌های نرم سیلیکونی</tspan>
+  </text>
+</g>
+
+
+<!-- ═══ ELECTRONICS (cy=340) ═══ -->
+<g id="g-box-elec">
+  <path class="crt-glow" d="M620,340 L680,340"/>
+  <path class="crt-core" d="M620,340 L680,340" marker-end="url(#ah)"/>
+  <text x="740" y="285" text-anchor="middle"
+        font-family="'Rubik',sans-serif" font-weight="500" font-size="14" fill="#70b8ff">
+    Electronics
+  </text>
+  <rect x="680" y="298" width="120" height="84" rx="8"
+        fill="#020810" stroke="#2090ea" stroke-width="1.5"/>
+  <rect x="722" y="326" width="36" height="28" rx="3" fill="none" stroke="#70b8ff" stroke-width="1.8"/>
+  <line x1="714" y1="333" x2="722" y2="333" stroke="#70b8ff" stroke-width="1.8"/>
+  <line x1="714" y1="347" x2="722" y2="347" stroke="#70b8ff" stroke-width="1.8"/>
+  <line x1="758" y1="333" x2="766" y2="333" stroke="#70b8ff" stroke-width="1.8"/>
+  <line x1="758" y1="347" x2="766" y2="347" stroke="#70b8ff" stroke-width="1.8"/>
+  <line x1="733" y1="318" x2="733" y2="326" stroke="#70b8ff" stroke-width="1.8"/>
+  <line x1="747" y1="318" x2="747" y2="326" stroke="#70b8ff" stroke-width="1.8"/>
+  <line x1="733" y1="354" x2="733" y2="362" stroke="#70b8ff" stroke-width="1.8"/>
+  <line x1="747" y1="354" x2="747" y2="362" stroke="#70b8ff" stroke-width="1.8"/>
+</g>
+<g id="g-items-elec">
+  <text x="945" text-anchor="start" direction="rtl" lang="fa"
+        font-family="'Vazirmatn',sans-serif" font-weight="300" font-size="13" fill="#70b8ff">
+    <!-- <tspan x="970" y="322">– حسگرها</tspan>
+    <tspan x="970" y="340">– میکروکنترلرها</tspan> -->
+    <tspan x="970" y="340" font-weight="700">– تامین نیاز‌های ساختار کنترلی</tspan>
+  </text>
+</g>
+
+
+<!-- ═══ CONTROL (cy=460) ═══ -->
+<g id="g-box-ctrl">
+  <path class="crt-glow" d="M620,460 L680,460"/>
+  <path class="crt-core" d="M620,460 L680,460" marker-end="url(#ah)"/>
+  <text x="740" y="405" text-anchor="middle"
+        font-family="'Rubik',sans-serif" font-weight="500" font-size="14" fill="#b870e8">
+    Control
+  </text>
+  <rect x="680" y="418" width="120" height="84" rx="8"
+        fill="#130820" stroke="#9050c8" stroke-width="1.5"/>
+  <path d="M740,440 A20,20 0 1,1 730,442.7"
+        fill="none" stroke="#b870e8" stroke-width="2" marker-end="url(#ah-purple)"/>
+</g>
+<g id="g-items-ctrl">
+  <text x="945" text-anchor="start" direction="rtl" lang="fa"
+        font-family="'Vazirmatn',sans-serif" font-weight="300" font-size="13" fill="#b870e8">
+    <!-- <tspan x="970" y="442">– کنترل شیر‌ها</tspan>
+    <tspan x="970" y="460">– کنترل فشار سیستم</tspan>
+    <tspan x="970" y="478">– کنترل حرکت</tspan> -->
+    <tspan x="970" y="465" font-weight="700">– ایجاد حرکت غلتشی تکرارپذیر</tspan>
+  </text>
+</g>
+
+</svg>
+
+<script>
+/* ────────────────────────────────────────────────────────────────
+   Animation timeline.
+
+   Phase 1 — the full graph (Software, Hardware, bus, all 4 boxes)
+   appears first, with no item lists yet.
+
+   Phase 2 — once the graph has fully finished appearing, ALL FOUR
+   item lists fade in together, after a single configurable pause.
+
+   ⬇ EDIT THIS ONE NUMBER to change how long the pause is (ms):
+*/
+var ITEMS_DELAY_AFTER_GRAPH = 1000;   // 1000ms = 1 second
+
+/* Don't need to touch anything below this line. */
+var GRAPH_COMPLETE_AT = 2050;         // last structural element finishes its 0.55s animation
+var itemsAt = GRAPH_COMPLETE_AT + ITEMS_DELAY_AFTER_GRAPH;
+
+var SEQ = [
+  { id:'g-software',     delay:   50, anim:'techAppear 0.55s both' },
+  { id:'g-hardware',     delay:  250, anim:'techAppear 0.55s both' },
+  { id:'g-arrow-sh',     delay:  500, anim:'fadeIn 0.40s both'     },
+  { id:'g-bus',          delay:  700, anim:'fadeIn 0.40s both'     },
+
+  { id:'g-box-frame',    delay:  900, anim:'techAppear 0.55s both' },
+  { id:'g-box-pneum',    delay: 1100, anim:'techAppear 0.55s both' },
+  { id:'g-box-elec',     delay: 1300, anim:'techAppear 0.55s both' },
+  { id:'g-box-ctrl',     delay: 1500, anim:'techAppear 0.55s both' },  /* finishes at 1500+550=2050 = GRAPH_COMPLETE_AT */
+
+  { id:'g-items-frame',  delay: itemsAt, anim:'fadeIn 0.40s both' },
+  { id:'g-items-pneum',  delay: itemsAt, anim:'fadeIn 0.40s both' },
+  { id:'g-items-elec',   delay: itemsAt, anim:'fadeIn 0.40s both' },
+  { id:'g-items-ctrl',   delay: itemsAt, anim:'fadeIn 0.40s both' }
+];
+var timers = [];
+function startAnimations() {
+  timers.forEach(clearTimeout); timers = [];
+  SEQ.forEach(function(s) {
+    var el = document.getElementById(s.id);
+    if (el) { el.style.animation = 'none'; el.style.opacity = '0'; }
+  });
+  void document.body.offsetWidth;
+  SEQ.forEach(function(s) {
+    timers.push(setTimeout(function() {
+      var el = document.getElementById(s.id);
+      if (el) { el.style.opacity = ''; el.style.animation = s.anim; }
+    }, s.delay));
+  });
+}
+window.addEventListener('load', startAnimations);
+window.addEventListener('message', function(e) { if (e.data === 'restart') startAnimations(); });
+</script>
+</body>
+</html>

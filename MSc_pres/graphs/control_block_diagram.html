@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; background: transparent; }
+svg { width: 100%; height: 100%; display: block; }
+
+@keyframes dashFlow   { from { stroke-dashoffset: 10; } to { stroke-dashoffset: 0; } }
+@keyframes techAppear { 0%{opacity:0} 38%{opacity:.7} 52%{opacity:.15} 70%{opacity:.9} 100%{opacity:1} }
+@keyframes fadeIn     { from{opacity:0} to{opacity:1} }
+
+.flow { stroke-dasharray: 6 4; animation: dashFlow .9s linear infinite; fill: none; }
+
+#g-ms, #g-fsm, #g-arr1, #g-pid, #g-arr2, #g-pneum, #g-arr3, #g-robot, #g-feedback { opacity: 0; }
+  @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap');
+</style>
+</head>
+<body>
+<!--
+  Layout
+  ─────────────────────────────────────────────────────────────────────────
+  ViewBox: 860 × 314
+
+  Boxes
+    Movement Sequence  x=32   y=15   w=140 h=42   right=172  cx=102  cy=36
+    FSM                x=20   y=108  w=165 h=60   right=185  cx=102  cy=138  bot=168
+    Sum junction       cx=290 cy=138 r=15          left=275  right=305  top=123  bot=153
+    PID Controller     x=340  y=110  w=148 h=56   right=488  cx=414  cy=138  bot=166
+    Pneumatic System   x=558  y=78   w=93  h=120  right=651  cx=605  cy=138  bot=198
+    Robot              x=681  y=78   w=150 h=120  right=831  cx=756  cy=138  bot=198
+
+  Gaps
+    Gap FSM→sum  : x=185–275  w=90   mid=230
+    Gap sum→PID  : x=305–340  w=35
+    Gap PID→Pn   : x=488–558  w=70   mid=523
+    Gap Pn→Rob   : x=651–681  w=30
+
+  Signal paths
+    1  MS → FSM            : M102,57  L102,108
+    2  FSM → sum           : M185,138 L275,138      label "Pressure Input" above
+    3  sum → PID           : M305,138 L340,138
+    4  Valve Input (FSM→Pn): M188,118 L188,50 L605,50 L605,78   label above at y=42
+    5  PID → Pn (Pump)     : M488,138 L558,138      label "Pump Input" above
+    6  Pn → Robot          : M651,138 L681,138
+    7  Pressure Feedback   : M605,198 L605,242 L290,242 L290,153
+    8  Robot Orientation   : M756,198 L756,278 L102,278 L102,168
+
+  Sum junction:  + at y=135 (moved down), − at y=147 (moved up)
+  Robot text:    at top of box, y=100 (not centered)
+  ─────────────────────────────────────────────────────────────────────────
+-->
+<svg viewBox="0 0 860 314" xmlns="http://www.w3.org/2000/svg"
+     preserveAspectRatio="xMidYMid meet">
+<defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+  <path d="M1,1.5 L9,5 L1,8.5 Z" fill="#00d4ff"/>
+</marker>
+</defs>
+
+<!-- 1 ── Movement Sequence (green)  x=32 w=140 — centered on FSM cx=102 -->
+<g id="g-ms">
+  <rect x="32" y="15" width="140" height="42" rx="7"
+        fill="#020e05" stroke="#00a860" stroke-width="1.5"/>
+  <text x="102" y="37" text-anchor="middle" dominant-baseline="central"
+        font-family="'Rubik',sans-serif" font-size="13" font-weight="600"
+        fill="#00d870">Movement Sequence</text>
+</g>
+
+<!-- 2 ── FSM box + summing junction -->
+<g id="g-fsm">
+  <rect x="20" y="108" width="165" height="60" rx="7"
+        fill="#02060f" stroke="#2090ea" stroke-width="1.5"/>
+  <text text-anchor="middle"
+        font-family="'Rubik',sans-serif" font-size="13" font-weight="600"
+        fill="#70b8ff">
+    <tspan x="102" y="132">Finite State</tspan>
+    <tspan x="102" y="150">Machine</tspan>
+  </text>
+  <!-- Summing junction circle -->
+  <circle cx="290" cy="138" r="15"
+          fill="#050c1a" stroke="#4a72b8" stroke-width="1.2"/>
+  <line x1="275" y1="138" x2="305" y2="138" stroke="#4a72b8" stroke-width="0.8"/>
+  <line x1="290" y1="123" x2="290" y2="153" stroke="#4a72b8" stroke-width="0.8"/>
+  <!-- + moved down 4px, − moved up 4px -->
+  <text x="284" y="135" text-anchor="middle"
+        font-family="'Rubik',sans-serif" font-size="11" font-weight="500"
+        fill="#50c0d8">+</text>
+  <text x="284" y="147" text-anchor="middle"
+        font-family="'Rubik',sans-serif" font-size="11" font-weight="500"
+        fill="#50c0d8">&#x2212;</text>
+</g>
+
+<!-- 3 ── Forward arrows wave 1 -->
+<g id="g-arr1">
+  <!-- MS → FSM vertical -->
+  <path d="M102,57 L102,108"
+        class="flow" stroke="#00d4ff" stroke-width="1.6" marker-end="url(#ah)"/>
+
+  <!-- Valve Input: FSM → up → right → down into Pneumatic top-center (cx=605) -->
+  <path d="M188,118 L188,50 L605,50 L605,78"
+        class="flow" stroke="#00d4ff" stroke-width="1.6" marker-end="url(#ah)"/>
+  <text x="397" y="42" text-anchor="middle"
+        font-family="'Rubik',sans-serif" font-size="11" font-weight="600"
+        fill="#50c0d8">Valve Input</text>
+
+  <!-- FSM → summing junction -->
+  <path d="M185,138 L275,138"
+        class="flow" stroke="#00d4ff" stroke-width="1.6" marker-end="url(#ah)"/>
+  <text text-anchor="middle"
+        font-family="'Rubik',sans-serif" font-size="11" font-weight="500"
+        fill="#50c0d8">
+    <tspan x="229" y="120">Pressure</tspan>
+    <tspan x="229" dy="13">Input</tspan>
+  </text>
+
+  <!-- Sum → PID -->
+  <path d="M305,138 L340,138"
+        class="flow" stroke="#00d4ff" stroke-width="1.6" marker-end="url(#ah)"/>
+</g>
+
+<!-- 4 ── PID Controller (blue) -->
+<g id="g-pid">
+  <rect x="340" y="110" width="148" height="56" rx="7"
+        fill="#02060f" stroke="#2090ea" stroke-width="1.5"/>
+  <text x="414" y="138" text-anchor="middle" dominant-baseline="central"
+        font-family="'Rubik',sans-serif" font-size="13" font-weight="600"
+        fill="#70b8ff">PID Controller</text>
+</g>
+
+<!-- 5 ── Pump Input arrow -->
+<g id="g-arr2">
+  <path d="M488,138 L558,138"
+        class="flow" stroke="#00d4ff" stroke-width="1.6" marker-end="url(#ah)"/>
+  <text text-anchor="middle"
+        font-family="'Rubik',sans-serif" font-size="11" font-weight="500"
+        fill="#50c0d8">
+    <tspan x="523" y="122">Pump</tspan>
+    <tspan x="523" dy="13">Input</tspan>
+  </text>
+</g>
+
+<!-- 6 ── Pneumatic System (amber)  x=558 w=93 cx=605 right=651 -->
+<g id="g-pneum">
+  <rect x="558" y="78" width="93" height="120" rx="7"
+        fill="#0d0902" stroke="#c89018" stroke-width="1.5"/>
+  <text text-anchor="middle"
+        font-family="'Rubik',sans-serif" font-size="13" font-weight="600"
+        fill="#e8a828">
+    <tspan x="605" y="132">Pneumatic</tspan>
+    <tspan x="605" y="150">System</tspan>
+  </text>
+</g>
+
+<!-- 7 ── Pneumatic → Robot  (right=651, Robot left=681) -->
+<g id="g-arr3">
+  <path d="M651,138 L681,138"
+        class="flow" stroke="#00d4ff" stroke-width="1.6" marker-end="url(#ah)"/>
+</g>
+
+<!-- 8 ── Robot (amber)  x=681 w=150 cx=756  text at top -->
+<g id="g-robot">
+  <rect x="681" y="78" width="150" height="120" rx="7"
+        fill="#0d0902" stroke="#c89018" stroke-width="1.5"/>
+  <text x="756" y="100" text-anchor="middle"
+        font-family="'Rubik',sans-serif" font-size="14" font-weight="600"
+        fill="#e8a828">Robot</text>
+</g>
+
+<!-- 9 ── Feedback paths -->
+<g id="g-feedback">
+  <!-- Pressure Feedback: Pneumatic bottom-center (605,198) → down → left → sum junction bottom -->
+  <path d="M605,198 L605,242 L290,242 L290,153"
+        class="flow" stroke="#00d4ff" stroke-width="1.6" marker-end="url(#ah)"/>
+  <text x="447" y="256" text-anchor="middle"
+        font-family="'Rubik',sans-serif" font-size="11" font-weight="500"
+        fill="#50c0d8">Pressure Feedback</text>
+
+  <!-- Robot Orientation: Robot bottom-center (756,198) → down → left → FSM bottom-center -->
+  <path d="M756,198 L756,278 L102,278 L102,168"
+        class="flow" stroke="#00d4ff" stroke-width="1.6" marker-end="url(#ah)"/>
+  <text x="429" y="292" text-anchor="middle"
+        font-family="'Rubik',sans-serif" font-size="11" font-weight="500"
+        fill="#50c0d8">Robot Orientation</text>
+</g>
+
+</svg>
+
+<script>
+var SEQUENCE = [
+  { id: 'g-ms',       delay:   50, anim: 'techAppear 0.55s both' },
+  { id: 'g-fsm',      delay:  420, anim: 'techAppear 0.55s both' },
+  { id: 'g-arr1',     delay:  870, anim: 'fadeIn     0.40s both' },
+  { id: 'g-pid',      delay: 1170, anim: 'techAppear 0.55s both' },
+  { id: 'g-arr2',     delay: 1570, anim: 'fadeIn     0.40s both' },
+  { id: 'g-pneum',    delay: 1820, anim: 'techAppear 0.55s both' },
+  { id: 'g-arr3',     delay: 2170, anim: 'fadeIn     0.35s both' },
+  { id: 'g-robot',    delay: 2420, anim: 'techAppear 0.55s both' },
+  { id: 'g-feedback', delay: 2800, anim: 'fadeIn     0.55s both' }
+];
+
+var timers = [];
+
+function startAnimations() {
+  timers.forEach(clearTimeout);
+  timers = [];
+  SEQUENCE.forEach(function(item) {
+    var el = document.getElementById(item.id);
+    if (!el) return;
+    el.style.animation = 'none';
+    el.style.opacity   = '0';
+  });
+  void document.body.offsetWidth;
+  SEQUENCE.forEach(function(item) {
+    var t = setTimeout(function() {
+      var el = document.getElementById(item.id);
+      if (!el) return;
+      el.style.opacity   = '';
+      el.style.animation = item.anim;
+    }, item.delay);
+    timers.push(t);
+  });
+}
+
+window.addEventListener('load', startAnimations);
+window.addEventListener('message', function(e) {
+  if (e.data === 'restart') startAnimations();
+});
+</script>
+</body>
+</html>

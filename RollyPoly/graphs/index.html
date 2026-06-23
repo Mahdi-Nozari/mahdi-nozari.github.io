@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>ربات چندوجهی غلتان نرم – مهدی نوذری</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="./reveal.js/dist/reveal.css">
+  <link rel="stylesheet" href="./reveal.js/dist/theme/Custom.css" id="theme">
+  <link rel="stylesheet" href="Retro.css">
+
+  <style>
+    /* ══════════════════════════════════════════════════════════════
+       SLIDE LAYOUT — text RIGHT, media LEFT
+       In dir="rtl" CSS-Grid places column-1 on the RIGHT side,
+       so .slide-text (first child) = right, .slide-media (second) = left.
+       ══════════════════════════════════════════════════════════════ */
+
+    .reveal .slides section { text-align: right; }
+
+    .slide-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+      margin-top: 14px;
+      font-size: 0.8em;
+    }
+    .slide-cols.text-wide { grid-template-columns: 3fr 2fr; }
+    .slide-wide           { margin-top: 14px; font-size: 0.8em; }
+
+    /* ══════════════════════════════════════════════════════════════
+       MEDIA PANEL BASE — shared by img-slot and vid-slot
+       ══════════════════════════════════════════════════════════════ */
+    .img-slot,
+    .vid-slot {
+      position: relative;
+      border-radius: 6px;
+      overflow: hidden;
+      box-sizing: border-box;
+
+      /* dark panel background */
+      background:
+        linear-gradient(160deg, rgba(0,20,50,0.70) 0%, rgba(0,8,25,0.85) 100%);
+
+      /* thin luminous border */
+      border: 1px solid rgba(0,229,255,0.22);
+
+      /* outer glow + subtle inner shadow */
+      box-shadow:
+        0 0 18px rgba(0,229,255,0.06),
+        0 4px 24px rgba(0,0,0,0.55),
+        inset 0 0 40px rgba(0,0,0,0.35);
+
+      /* faint horizontal scan-lines */
+      background-image:
+        linear-gradient(160deg, rgba(0,20,50,0.70) 0%, rgba(0,8,25,0.85) 100%),
+        repeating-linear-gradient(
+          0deg, transparent 0px, transparent 3px,
+          rgba(0,0,0,0.08) 3px, rgba(0,0,0,0.08) 4px
+        );
+      background-blend-mode: normal, multiply;
+    }
+
+    /* ── Corner bracket accents ───────────────────────────────────
+       Uses background-image shorthand to draw 4 corner marks
+       without adding extra DOM elements.
+       ──────────────────────────────────────────────────────────── */
+    .img-slot::after,
+    .vid-slot::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 3;
+      background:
+        /* top-right ─ horizontal */
+        linear-gradient(90deg,  rgba(0,229,255,0.55) 14px, transparent 14px)
+          100% 0 / 14px 2px no-repeat,
+        /* top-right ─ vertical */
+        linear-gradient(180deg, rgba(0,229,255,0.55) 14px, transparent 14px)
+          100% 0 / 2px 14px no-repeat,
+        /* bottom-left ─ horizontal */
+        linear-gradient(270deg, rgba(0,229,255,0.55) 14px, transparent 14px)
+          0% 100% / 14px 2px no-repeat,
+        /* bottom-left ─ vertical */
+        linear-gradient(0deg,   rgba(0,229,255,0.55) 14px, transparent 14px)
+          0% 100% / 2px 14px no-repeat,
+        /* top-left ─ horizontal */
+        linear-gradient(90deg,  rgba(0,229,255,0.30) 14px, transparent 14px)
+          0% 0 / 14px 2px no-repeat,
+        /* top-left ─ vertical */
+        linear-gradient(180deg, rgba(0,229,255,0.30) 14px, transparent 14px)
+          0% 0 / 2px 14px no-repeat,
+        /* bottom-right ─ horizontal */
+        linear-gradient(270deg, rgba(0,229,255,0.30) 14px, transparent 14px)
+          100% 100% / 14px 2px no-repeat,
+        /* bottom-right ─ vertical */
+        linear-gradient(0deg,   rgba(0,229,255,0.30) 14px, transparent 14px)
+          100% 100% / 2px 14px no-repeat;
+    }
+
+    /* ── Caption strip ────────────────────────────────────────────
+       Gradient fade at the bottom; caption text sits above it.
+       ──────────────────────────────────────────────────────────── */
+    .img-slot::before,
+    .vid-slot::before {
+      content: attr(data-caption);
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 18px 12px 6px;
+      background: linear-gradient(0deg, rgba(0,8,25,0.88) 0%, transparent 100%);
+      font-size: 0.62em;
+      color: rgba(0,229,255,0.50);
+      text-align: center;
+      letter-spacing: 0.05em;
+      z-index: 2;
+      font-family: monospace;
+    }
+
+    /* ── Image slot specifics ─────────────────────────────────────
+       HOW TO ADD YOUR IMAGE
+       1. Put file in: public/media/my-figure.jpg
+       2. Add inside the div:
+            <img src="media/my-figure.jpg" alt="توضیح">
+       ──────────────────────────────────────────────────────────── */
+    .img-slot {
+      min-height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .img-slot img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      padding: 10px 10px 28px;
+      box-sizing: border-box;
+      position: relative;
+      z-index: 1;
+    }
+    /* When empty: show a faint image-frame icon */
+    .img-slot:not(:has(img)):not(:has(canvas)) {
+      background-image:
+        linear-gradient(160deg, rgba(0,20,50,0.70) 0%, rgba(0,8,25,0.85) 100%),
+        repeating-linear-gradient(0deg,transparent 0px,transparent 3px,rgba(0,0,0,0.08) 3px,rgba(0,0,0,0.08) 4px),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='54' height='44' viewBox='0 0 54 44'%3E%3Crect x='1' y='1' width='52' height='42' rx='3' fill='none' stroke='rgba(0,229,255,0.18)' stroke-width='1.5'/%3E%3Ccircle cx='16' cy='14' r='5' fill='none' stroke='rgba(0,229,255,0.18)' stroke-width='1.5'/%3E%3Cpolyline points='1,31 18,18 28,26 38,16 53,28' fill='none' stroke='rgba(0,229,255,0.18)' stroke-width='1.5'/%3E%3C/svg%3E");
+      background-repeat: no-repeat, repeat, no-repeat;
+      background-position: center, center, center 38%;
+      background-size: auto, auto, 54px 44px;
+    }
+
+    /* ── Video slot specifics ─────────────────────────────────────
+       HOW TO ADD YOUR VIDEO
+       1. Put file in: public/media/my-video.mp4
+       2. Add inside the div:
+            <video src="media/my-video.mp4" controls loop muted
+                   preload="metadata" poster="media/thumb.jpg"></video>
+       TIPS: loop=auto-loop | muted=avoids autoplay block |
+             poster=thumbnail frame shown before play
+       ──────────────────────────────────────────────────────────── */
+    .vid-slot {
+      min-height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .vid-slot video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding-bottom: 24px;
+      box-sizing: border-box;
+      position: relative;
+      z-index: 1;
+      border-radius: 4px;
+    }
+    /* When empty: faint play-button icon */
+    .vid-slot:not(:has(video)) {
+      background-image:
+        linear-gradient(160deg, rgba(0,20,50,0.70) 0%, rgba(0,8,25,0.85) 100%),
+        repeating-linear-gradient(0deg,transparent 0px,transparent 3px,rgba(0,0,0,0.08) 3px,rgba(0,0,0,0.08) 4px),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E%3Ccircle cx='30' cy='30' r='28' fill='none' stroke='rgba(0,229,255,0.22)' stroke-width='1.5'/%3E%3Cpolygon points='23,16 47,30 23,44' fill='rgba(0,229,255,0.20)'/%3E%3C/svg%3E");
+      background-repeat: no-repeat, repeat, no-repeat;
+      background-position: center, center, center 40%;
+      background-size: auto, auto, 56px 56px;
+    }
+    /* Caption strip colour differs for video (slightly warmer) */
+    .vid-slot::before {
+      color: rgba(100,220,255,0.50);
+    }
+    /* Hide caption strip entirely once a real video is loaded */
+    .vid-slot:has(video)::before { display: none; }
+
+    /* ── Annotation boxes (used with annotbox.js) ─────────────────── */
+    .annot-box {
+      position: absolute;
+      background: rgba(0,18,48,0.82);
+      border: 1px solid rgba(0,229,255,0.45);
+      box-shadow:
+        0 0 12px rgba(0,229,255,0.12),
+        inset 0 0 8px rgba(0,229,255,0.04);
+      padding: 10px 13px;
+      border-radius: 6px;
+      font-size: 0.72em;
+      line-height: 1.5;
+      box-sizing: border-box;
+      backdrop-filter: blur(4px);
+    }
+    .annot-label { display:block; color:#00e5ff; font-weight:bold; margin-bottom:3px; }
+    .annot-part  { display:block; margin-bottom:2px; color:#cde; }
+    .annot-desc  { display:block; color:rgba(180,200,220,0.7); font-size:0.88em; }
+    .annot-svg   {
+      position:absolute; top:50%; width:1px; height:1px;
+      pointer-events:none; overflow:visible; transform:translateY(-50%);
+    }
+    /* ══════════════════════════════════════════════════════════════
+       KEY RESULTS CARDS  (نتایج کلیدی)
+       ─────────────────────────────────────────────────────────────
+       To change values  → edit .kr-card content in 07-conclusion.html
+       To change timing  → edit animation-delay values below
+       To add/remove a card → copy/delete a .kr-card block in the HTML
+       ══════════════════════════════════════════════════════════════ */
+
+    .kr-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .kr-card {
+      position: relative;
+      background: rgba(0, 8, 28, 0.75);
+      border: 1px solid rgba(0, 229, 255, 0.28);
+      border-radius: 8px;
+      padding: 26px 14px 22px;
+      text-align: center;
+      box-shadow:
+        0 0 18px rgba(0, 229, 255, 0.06),
+        0 4px 24px rgba(0, 0, 0, 0.55),
+        inset 0 0 30px rgba(0, 0, 0, 0.30);
+      overflow: hidden;
+      opacity: 0; /* hidden until animation fires */
+    }
+
+    /* bottom accent bar */
+    .kr-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 18%; right: 18%; height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(0,229,255,0.60), transparent);
+    }
+
+    /* big number */
+    .kr-value {
+      font-size: 2.6em;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    /* unit (kPa, cm, …) */
+    .kr-unit {
+      font-size: 0.85em;
+      color: rgba(0, 229, 255, 0.78);
+      margin-top: 3px;
+      letter-spacing: 0.06em;
+    }
+
+    /* description label */
+    .kr-label {
+      font-size: 0.60em;
+      color: rgba(200, 220, 240, 0.62);
+      margin-top: 10px;
+      line-height: 1.45;
+    }
+
+    /* ── animations ────────────────────────────────────────────── */
+    @keyframes kr-rise {
+      0%   { opacity: 0; transform: translateY(22px) scale(0.95); }
+      65%  { opacity: 1; transform: translateY(-3px) scale(1.02); }
+      100% { opacity: 1; transform: translateY(0)    scale(1);    }
+    }
+    @keyframes kr-glow {
+      0%   { text-shadow: none;                                        color: #aac; }
+      55%  { text-shadow: 0 0 22px rgba(0,229,255,0.55),
+                          0 0 44px rgba(0,229,255,0.25);               color: #fff; }
+      100% { text-shadow: 0 0  8px rgba(0,229,255,0.20);              color: #fff; }
+    }
+
+    /* cards animate in when the slide is active */
+    .present .kr-card {
+      animation: kr-rise 0.65s cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
+    }
+    .present .kr-card .kr-value {
+      animation: kr-glow 0.9s ease forwards;
+    }
+
+    /* staggered delays — adjust here to taste */
+    .present .kr-card:nth-child(1)         { animation-delay: 0.10s; }
+    .present .kr-card:nth-child(2)         { animation-delay: 0.25s; }
+    .present .kr-card:nth-child(3)         { animation-delay: 0.40s; }
+    .present .kr-card:nth-child(4)         { animation-delay: 0.55s; }
+    .present .kr-card:nth-child(1) .kr-value { animation-delay: 0.20s; }
+    .present .kr-card:nth-child(2) .kr-value { animation-delay: 0.35s; }
+    .present .kr-card:nth-child(3) .kr-value { animation-delay: 0.50s; }
+    .present .kr-card:nth-child(4) .kr-value { animation-delay: 0.65s; }
+  </style>
+</head>
+<body>
+  <div class="grid-background"></div>
+
+  <!-- TOP NAVIGATION — 6 items -->
+  <div class="top-nav">
+    <span id="nav-intro">مقدمه</span>
+    <span id="nav-background">پیشینه</span>
+    <span id="nav-design">طراحی</span>
+    <span id="nav-fabrication">ساخت</span>
+    <span id="nav-results">نتایج</span>
+    <span id="nav-conclusion">بحث و نتیجه‌گیری</span>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <img src="/logos/UT.png" class="logo-left" alt="دانشگاه تهران">
+    <div id="page-number">صفحه ۱</div>
+    <p id="footer-text">طراحی، توسعه و کنترل حرکت یک ربات چندوجهی غلتان نرم — مهدی نوذری — خرداد ۱۴۰۵</p>
+    <img src="/logos/Cast_neonblue.svg" class="logo-right" alt="آزمایشگاه CAST">
+  </div>
+
+  <!-- TITLE BARS -->
+  <div class="slide-title-bar"><span id="slide-title"></span></div>
+  <div class="secondary-title-bar"><span id="secondary-title"></span></div>
+
+  <!-- THREE.JS CANVAS -->
+  <canvas id="threeCanvas" style="width:100%;height:100%;display:block;"></canvas>
+
+  <div class="reveal" dir="rtl">
+    <div class="slides">
+      <!-- ─────────────────────────────────────────────────────────────────
+           Slides are injected here at runtime by the module below.
+           Edit individual sections in:  sections/01-title.html  etc.
+           Add / remove sections in:     slides.js
+           ───────────────────────────────────────────────────────────────── -->
+    </div>
+  </div>
+
+  <!-- ── Inject slides BEFORE Reveal initialises ───────────────────────────
+       Module scripts run in document order, so this inline module runs
+       before the main.js module that follows it, guaranteeing all
+       <section> elements are in the DOM when Reveal.initialize() is called.
+       ─────────────────────────────────────────────────────────────────── -->
+  <script type="module">
+    import slidesHTML from '/slides.js'
+    document.querySelector('.reveal .slides').innerHTML = slidesHTML
+  </script>
+
+  <script src="annotbox.js" defer></script>
+  <script type="module" src="/main.js"></script>
+  <script src="script.js" defer></script>
+
+  <!-- ── Video autoplay on slide change ──────────────────────────────
+       Listens on the .reveal DOM element directly — works even when
+       Reveal is initialised as an ES-module local instance (not on
+       window.Reveal), because Reveal always dispatches its events on
+       its wrapper element regardless of how it was imported.
+       ──────────────────────────────────────────────────────────────── -->
+  <script>
+    (function () {
+      function playVideosIn(slide) {
+        if (!slide) return;
+        slide.querySelectorAll('video').forEach(function (v) {
+          v.play().catch(function () {
+            /* browser blocked autoplay — user can press play manually */
+          });
+        });
+      }
+
+      function pauseAllVideos() {
+        document.querySelectorAll('.reveal .slides video').forEach(function (v) {
+          v.pause();
+          v.currentTime = 0;
+        });
+      }
+
+      window.addEventListener('load', function () {
+        var wrapper = document.querySelector('.reveal');
+        if (!wrapper) return;
+
+        /* slidechanged fires on the wrapper element with currentSlide
+           directly on the event object (Reveal extends the DOM event). */
+        wrapper.addEventListener('slidechanged', function (event) {
+          pauseAllVideos();
+          playVideosIn(event.currentSlide);
+        });
+
+        /* ready fires once Reveal has finished initialising —
+           auto-play the video if the presentation opens on that slide. */
+        wrapper.addEventListener('ready', function (event) {
+          playVideosIn(event.currentSlide);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

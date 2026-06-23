@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>ربات چندوجهی غلتان نرم – مهدی نوذری</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <style>
+    /* ══════════════════════════════════════════════════════════════
+       SLIDE LAYOUT — text RIGHT, media LEFT
+       In dir="rtl" CSS-Grid places column-1 on the RIGHT side,
+       so .slide-text (first child) = right, .slide-media (second) = left.
+       ══════════════════════════════════════════════════════════════ */
+
+    .reveal .slides section { text-align: right; }
+
+    .slide-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+      margin-top: 14px;
+      font-size: 0.8em;
+    }
+    .slide-cols.text-wide { grid-template-columns: 3fr 2fr; }
+    .slide-wide           { margin-top: 14px; font-size: 0.8em; }
+    /* ══════════════════════════════════════════════════════════════
+   MEDIA PANEL BASE — refined subtle neon panel
+   Replace the existing media-box related CSS with this block
+   ══════════════════════════════════════════════════════════════ */
+
+.img-slot,
+.vid-slot {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-sizing: border-box;
+  isolation: isolate;
+
+  background:
+    radial-gradient(circle at 18% 16%, rgba(0,229,255,0.035), transparent 30%),
+    radial-gradient(circle at 82% 84%, rgba(0,229,255,0.020), transparent 28%),
+    linear-gradient(165deg, rgba(4,24,56,0.82) 0%, rgba(1,10,28,0.92) 100%);
+
+  border: 1px solid rgba(0,229,255,0.18);
+
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.02) inset,
+    0 0 12px rgba(0,229,255,0.04),
+    0 8px 26px rgba(0,0,0,0.42),
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    inset 0 0 24px rgba(0,229,255,0.018),
+    inset 0 -26px 34px rgba(0,0,0,0.26);
+}
+
+/* subtle overlay: corner marks + inner frame + scan texture */
+.img-slot::after,
+.vid-slot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    /* top-right corner */
+    linear-gradient(90deg, rgba(0,229,255,0.68) 18px, transparent 18px)
+      calc(100% - 10px) 10px / 18px 2px no-repeat,
+    linear-gradient(180deg, rgba(0,229,255,0.68) 18px, transparent 18px)
+      calc(100% - 10px) 10px / 2px 18px no-repeat,
+
+    /* bottom-left corner */
+    linear-gradient(270deg, rgba(0,229,255,0.52) 18px, transparent 18px)
+      10px calc(100% - 10px) / 18px 2px no-repeat,
+    linear-gradient(0deg, rgba(0,229,255,0.52) 18px, transparent 18px)
+      10px calc(100% - 10px) / 2px 18px no-repeat,
+
+    /* inner frame */
+    linear-gradient(rgba(0,229,255,0.035), rgba(0,229,255,0.035))
+      center / calc(100% - 20px) calc(100% - 20px) no-repeat,
+
+    /* faint scan lines */
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 4px,
+      rgba(255,255,255,0.020) 4px,
+      rgba(255,255,255,0.020) 5px
+    );
+  border-radius: inherit;
+  opacity: 0.95;
+}
+
+/* caption strip */
+.img-slot::before,
+.vid-slot::before {
+  content: attr(data-caption);
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: 22px 14px 8px;
+  background:
+    linear-gradient(0deg, rgba(2,10,24,0.92) 0%, rgba(2,10,24,0.55) 52%, transparent 100%);
+  color: rgba(130,230,255,0.72);
+  text-align: center;
+  font-family: monospace;
+  font-size: 0.58em;
+  letter-spacing: 0.045em;
+  line-height: 1.3;
+}
+
+/* image slot */
+.img-slot {
+  min-height: 205px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.img-slot img,
+.img-slot canvas {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  padding: 14px 14px 30px;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+  border-radius: 6px;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.18));
+}
+
+/* empty image state */
+.img-slot:not(:has(img)):not(:has(canvas)) {
+  background:
+    radial-gradient(circle at 18% 16%, rgba(0,229,255,0.08), transparent 30%),
+    radial-gradient(circle at 82% 84%, rgba(0,229,255,0.04), transparent 28%),
+    linear-gradient(165deg, rgba(4,24,56,0.82) 0%, rgba(1,10,28,0.92) 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='66' height='52' viewBox='0 0 66 52'%3E%3Crect x='2' y='2' width='62' height='48' rx='5' fill='none' stroke='rgba(0,229,255,0.24)' stroke-width='1.6'/%3E%3Ccircle cx='20' cy='17' r='4.8' fill='none' stroke='rgba(0,229,255,0.24)' stroke-width='1.5'/%3E%3Cpolyline points='3,38 21,24 33,33 46,19 63,35' fill='none' stroke='rgba(0,229,255,0.22)' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  background-position: center, center, center, center 42%;
+  background-size: auto, auto, auto, 66px 52px;
+}
+
+/* video slot */
+.vid-slot {
+  min-height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vid-slot video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 12px 12px 30px;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+  border-radius: 6px;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.18));
+}
+
+/* empty video state */
+.vid-slot:not(:has(video)) {
+  background:
+    radial-gradient(circle at 18% 16%, rgba(0,229,255,0.08), transparent 30%),
+    radial-gradient(circle at 82% 84%, rgba(0,229,255,0.04), transparent 28%),
+    linear-gradient(165deg, rgba(4,24,56,0.82) 0%, rgba(1,10,28,0.92) 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 68 68'%3E%3Ccircle cx='34' cy='34' r='29' fill='none' stroke='rgba(0,229,255,0.24)' stroke-width='1.6'/%3E%3Cpolygon points='29,23 47,34 29,45' fill='rgba(0,229,255,0.22)'/%3E%3C/svg%3E");
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  background-position: center, center, center, center 42%;
+  background-size: auto, auto, auto, 62px 62px;
+}
+
+/* hide caption for actual video if desired */
+.vid-slot:has(video)::before {
+  display: none;
+}
+
+/* ── Annotation boxes (used with annotbox.js) ─────────────────── */
+
+    /* Glitch entrance keyframes — fired when slide becomes active */
+    @keyframes annot-glitch-in {
+      0%   { opacity: 0;   transform: translateX(8px)  skewX(-2deg);  clip-path: inset(45% 0 45% 0); }
+      6%   { opacity: 0.8; transform: translateX(-5px) skewX( 1.5deg); clip-path: inset(0% 0 0% 0);  }
+      11%  { opacity: 0.2; transform: translateX(4px)  skewX(-0.8deg); clip-path: inset(20% 0 10% 0); }
+      17%  { opacity: 1;   transform: translateX(-2px) skewX( 0.4deg); clip-path: inset(0% 0 0% 0);  }
+      24%  { opacity: 0.6; transform: translateX(1px)  skewX(-0.2deg); }
+      32%  { opacity: 1;   transform: translateX(0)    skewX(0);       }
+      100% { opacity: 1;   transform: translateX(0)    skewX(0);       }
+    }
+
+    .annot-box {
+      position: absolute;
+      background: rgba(0,18,48,0.82);
+      border: 1px solid rgba(0,229,255,0.45);
+      box-shadow:
+        0 0 12px rgba(0,229,255,0.12),
+        inset 0 0 8px rgba(0,229,255,0.04);
+      padding: 10px 13px;
+      border-radius: 6px;
+      font-size: 0.72em;
+      line-height: 1.5;
+      box-sizing: border-box;
+      backdrop-filter: blur(4px);
+      /* hidden by default — animation sets it to visible */
+      opacity: 0;
+      z-index: 5; 
+    }
+
+    /* All boxes appear at once when the slide becomes active.
+       The 0.35 s delay lets the slide-transition settle first. */
+    .present .annot-box {
+      animation: annot-glitch-in 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation-delay: var(--annot-delay, 2s);
+    }
+
+    .annot-label { display:block; color:#00e5ff; font-weight:bold; margin-bottom:3px; }
+    .annot-part  { display:block; margin-bottom:2px; color:#cde; }
+    .annot-desc  { display:block; color:rgba(180,200,220,0.7); font-size:0.88em; }
+    .annot-svg   {
+      position:absolute; top:50%; width:1px; height:1px;
+      pointer-events:none; overflow:visible; transform:translateY(-50%);
+      z-index: 5;
+    }
+    /* ══════════════════════════════════════════════════════════════
+       KEY RESULTS CARDS  (نتایج کلیدی)
+       ─────────────────────────────────────────────────────────────
+       To change values  → edit .kr-card content in 07-conclusion.html
+       To change timing  → edit animation-delay values below
+       To add/remove a card → copy/delete a .kr-card block in the HTML
+       ══════════════════════════════════════════════════════════════ */
+
+    .kr-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .kr-card {
+      position: relative;
+      background: rgba(0, 8, 28, 0.75);
+      border: 1px solid rgba(0, 229, 255, 0.28);
+      border-radius: 8px;
+      padding: 26px 14px 22px;
+      text-align: center;
+      box-shadow:
+        0 0 18px rgba(0, 229, 255, 0.06),
+        0 4px 24px rgba(0, 0, 0, 0.55),
+        inset 0 0 30px rgba(0, 0, 0, 0.30);
+      overflow: hidden;
+      opacity: 0; /* hidden until animation fires */
+    }
+
+    /* bottom accent bar */
+    .kr-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 18%; right: 18%; height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(0,229,255,0.60), transparent);
+    }
+
+    /* big number */
+    .kr-value {
+      font-size: 2.6em;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    /* unit (kPa, cm, …) */
+    .kr-unit {
+      font-size: 0.85em;
+      color: rgba(0, 229, 255, 0.78);
+      margin-top: 3px;
+      letter-spacing: 0.06em;
+    }
+
+    /* description label */
+    .kr-label {
+      font-size: 0.60em;
+      color: rgba(200, 220, 240, 0.62);
+      margin-top: 10px;
+      line-height: 1.45;
+    }
+
+    /* ── animations ────────────────────────────────────────────── */
+    @keyframes kr-rise {
+      0%   { opacity: 0; transform: translateY(22px) scale(0.95); }
+      65%  { opacity: 1; transform: translateY(-3px) scale(1.02); }
+      100% { opacity: 1; transform: translateY(0)    scale(1);    }
+    }
+    @keyframes kr-glow {
+      0%   { text-shadow: none;                                        color: #aac; }
+      55%  { text-shadow: 0 0 22px rgba(0,229,255,0.55),
+                          0 0 44px rgba(0,229,255,0.25);               color: #fff; }
+      100% { text-shadow: 0 0  8px rgba(0,229,255,0.20);              color: #fff; }
+    }
+
+    /* cards animate in when the slide is active */
+    .present .kr-card {
+      animation: kr-rise 0.65s cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
+    }
+    .present .kr-card .kr-value {
+      animation: kr-glow 0.9s ease forwards;
+    }
+
+    /* staggered delays — adjust here to taste */
+    .present .kr-card:nth-child(1)         { animation-delay: 0.10s; }
+    .present .kr-card:nth-child(2)         { animation-delay: 0.25s; }
+    .present .kr-card:nth-child(3)         { animation-delay: 0.40s; }
+    .present .kr-card:nth-child(4)         { animation-delay: 0.55s; }
+    .present .kr-card:nth-child(1) .kr-value { animation-delay: 0.20s; }
+    .present .kr-card:nth-child(2) .kr-value { animation-delay: 0.35s; }
+    .present .kr-card:nth-child(3) .kr-value { animation-delay: 0.50s; }
+    .present .kr-card:nth-child(4) .kr-value { animation-delay: 0.65s; }
+  </style>
+  <script type="module" crossorigin src="/assets/index-C7Us1EbN.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-vxPwyYlx.css">
+</head>
+<body>
+  <div class="grid-background"></div>
+
+  <!-- TOP NAVIGATION — 6 items -->
+  <div class="top-nav">
+    <span id="nav-intro">مقدمه</span>
+    <span id="nav-background">پیشینه</span>
+    <span id="nav-design">طراحی</span>
+    <span id="nav-fabrication">ساخت</span>
+    <span id="nav-results">نتایج</span>
+    <span id="nav-conclusion">بحث و نتیجه‌گیری</span>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <img src="/logos/UT.png" class="logo-left" alt="دانشگاه تهران">
+    <div id="page-number">صفحه ۱</div>
+    <p id="footer-text">طراحی، توسعه و کنترل حرکت یک ربات چندوجهی غلتان نرم — مهدی نوذری — خرداد ۱۴۰۵</p>
+    <img src="/logos/Cast_neonblue.svg" class="logo-right" alt="آزمایشگاه CAST">
+  </div>
+
+  <!-- TITLE BARS -->
+  <div class="slide-title-bar"><span id="slide-title"></span></div>
+  <div class="secondary-title-bar"><span id="secondary-title"></span></div>
+
+  <!-- THREE.JS CANVAS -->
+  <canvas id="threeCanvas" style="width:100%;height:100%;display:block;"></canvas>
+
+  <canvas id="threeCanvasFull" style="
+    position: fixed;
+    top: 0; left: 0;
+    display: none;
+    pointer-events: auto;
+    z-index: 100;
+  "></canvas>
+
+  <div class="reveal" dir="rtl">
+    <div class="slides">
+      <!-- ─────────────────────────────────────────────────────────────────
+           Slides are injected here at runtime by the module below.
+           Edit individual sections in:  sections/01-title.html  etc.
+           Add / remove sections in:     slides.js
+           ───────────────────────────────────────────────────────────────── -->
+    </div>
+  </div>
+
+  <!-- ── Inject slides BEFORE Reveal initialises ───────────────────────────
+       Module scripts run in document order, so this inline module runs
+       before the main.js module that follows it, guaranteeing all
+       <section> elements are in the DOM when Reveal.initialize() is called.
+       ─────────────────────────────────────────────────────────────────── -->
+
+
+  <!-- ── Video autoplay on slide change ──────────────────────────────
+       Listens on the .reveal DOM element directly — works even when
+       Reveal is initialised as an ES-module local instance (not on
+       window.Reveal), because Reveal always dispatches its events on
+       its wrapper element regardless of how it was imported.
+       ──────────────────────────────────────────────────────────────── -->
+  <script>
+    (function () {
+      function playVideosIn(slide) {
+        if (!slide) return;
+        slide.querySelectorAll('video').forEach(function (v) {
+          v.play().catch(function () {
+            /* browser blocked autoplay — user can press play manually */
+          });
+        });
+      }
+
+      function pauseAllVideos() {
+        document.querySelectorAll('.reveal .slides video').forEach(function (v) {
+          v.pause();
+          v.currentTime = 0;
+        });
+      }
+
+      window.addEventListener('load', function () {
+        var wrapper = document.querySelector('.reveal');
+        if (!wrapper) return;
+
+        /* slidechanged fires on the wrapper element with currentSlide
+           directly on the event object (Reveal extends the DOM event). */
+        wrapper.addEventListener('slidechanged', function (event) {
+          pauseAllVideos();
+          playVideosIn(event.currentSlide);
+        });
+
+        /* ready fires once Reveal has finished initialising —
+           auto-play the video if the presentation opens on that slide. */
+        wrapper.addEventListener('ready', function (event) {
+          playVideosIn(event.currentSlide);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; background: transparent; }
+svg { width: 100%; height: 100%; display: block; }
+
+/* ── CRT phosphor glow — static, no animation ────────────────── */
+.crt-glow { fill:none; stroke:#00d4ff; stroke-width:6; stroke-opacity:.14; filter:url(#blur); }
+.crt-core { fill:none; stroke:#00d4ff; stroke-width:1.5; stroke-opacity:.90; }
+/* Wireless: same glow/core but dashed */
+.wifi-glow { fill:none; stroke:#00d4ff; stroke-width:5; stroke-opacity:.12; stroke-dasharray:6 5; filter:url(#blur); }
+.wifi-core { fill:none; stroke:#00d4ff; stroke-width:1.5; stroke-opacity:.88; stroke-dasharray:6 5; }
+
+/* ── Entrance animations (for groups only) ────────────────────── */
+@keyframes techAppear { 0%{opacity:0} 38%{opacity:.7} 52%{opacity:.15} 70%{opacity:.9} 100%{opacity:1} }
+@keyframes fadeIn     { from{opacity:0} to{opacity:1} }
+#g-esys,#g-psys,#g-robot,#g-comp,#g-rpi4,#g-wifi,
+#g-arduino,#g-uart,#g-imu-adc,#g-i2c,
+#g-lower,#g-bus,#g-esys-robot,
+#g-psys-boxes,#g-cross,#g-pneum { opacity:0; }
+</style>
+</head>
+<body>
+<!--
+  ViewBox: 1020 × 430
+  ─────────────────────────────────────────────────────────────────────────────
+  Computer       x=8    y=36  w=128 h=50   cx=72   cy=61   r=136
+  ES             x=240  y=10  w=560 h=260  r=800   bot=270
+    RPi4         x=250  y=36  w=142 h=50   cx=321  cy=61   r=392  bot=86
+    Arduino      x=250  y=110 w=142 h=58   cx=321  cy=139  r=392  bot=168
+    ADC          x=407  y=110 w=118 h=58   cx=466  cy=139  r=525  bot=168
+    IMU          x=540  y=108 w=138 h=55   cx=609  cy=135  r=678  bot=163
+    MOSFET_L     x=261  y=197 w=120 h=48   cx=321  cy=221  r=381  bot=245  ← cx=Pumps cx
+    Pressure     x=394  y=197 w=144 h=48   cx=466  cy=221  r=538  bot=245  ← cx=AirRes cx
+    MOSFET_R     x=551  y=197 w=120 h=48   cx=611  cy=221  r=671  bot=245  ← cx=Valve cx
+  P-Sys          x=240  y=278 w=560 h=145  r=800   bot=423
+    Pumps        x=271  y=339 w=100 h=50   cx=321  cy=364  r=371
+    AirRes       pentagon cx=466 cy=364 r=40
+                 pts: "466,324 504,352 489,396 442,396 428,352"
+    Valve        x=552  y=339 w=118 h=50   cx=611  cy=364  r=670
+    SoftAct      x=688  y=339 w=80  h=50   cx=728  cy=364  r=768
+  Robot          x=820  y=10  w=155 h=413  cx=897  r=975   bot=423
+
+  Alignment: MOSFET_L cx = Pumps cx = 321  (straight vertical, zero bends)
+             Pressure  cx = AirRes cx = 466 (straight vertical)
+             MOSFET_R  cx = Valve  cx = 611 (straight vertical)
+  Pneumatic vertical center: box y=339 → 34px above/below label area ✓
+  Computer gap: 240-136 = 104px to ES border
+  ─────────────────────────────────────────────────────────────────────────────
+-->
+<svg viewBox="0 0 1020 430" xmlns="http://www.w3.org/2000/svg"
+     preserveAspectRatio="xMidYMid meet">
+<defs>
+  <filter id="blur" x="-400%" y="-400%" width="900%" height="900%">
+    <feGaussianBlur stdDeviation="3" in="SourceGraphic"/>
+  </filter>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+    <path d="M1,1.5 L9,5 L1,8.5 Z" fill="#00d4ff"/>
+  </marker>
+  <marker id="ahr" viewBox="0 0 10 10" refX="1" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+    <path d="M9,1.5 L1,5 L9,8.5 Z" fill="#00d4ff"/>
+  </marker>
+  <marker id="ah-amb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+    <path d="M1,1.5 L9,5 L1,8.5 Z" fill="#c89018"/>
+  </marker>
+</defs>
+
+<!-- ═══ CONTAINERS ═══ -->
+<g id="g-esys">
+  <rect x="240" y="10" width="560" height="260" rx="12"
+        fill="rgba(5,12,38,0.88)" stroke="#2060b8" stroke-width="1.2" stroke-dasharray="6 3"/>
+  <text x="792" y="28" text-anchor="end"
+        font-family="'Rubik',sans-serif" font-weight="500" font-size="13" fill="#4a80d8">
+    Electronic System
+  </text>
+</g>
+<g id="g-psys">
+  <rect x="240" y="278" width="560" height="145" rx="12"
+        fill="rgba(28,14,4,0.88)" stroke="#a07010" stroke-width="1.2" stroke-dasharray="6 3"/>
+  <text x="792" y="296" text-anchor="end"
+        font-family="'Rubik',sans-serif" font-weight="500" font-size="13" fill="#c89020">
+    Pneumatic System
+  </text>
+</g>
+<g id="g-robot">
+  <rect x="820" y="10" width="155" height="413" rx="12"
+        fill="rgba(8,14,30,0.55)" stroke="#4a72b8" stroke-width="1" stroke-dasharray="4 3"/>
+  <text font-family="'Rubik',sans-serif" font-weight="500" font-size="13" fill="#8ab0e0">
+    <tspan x="897" y="36" text-anchor="middle">Rolling</tspan>
+    <tspan x="897" y="52" text-anchor="middle">Polyhedral</tspan>
+    <tspan x="897" y="68" text-anchor="middle">Robot</tspan>
+  </text>
+  <circle cx="897" cy="250" r="78" fill="none" stroke="#2a4870" stroke-width="0.8" opacity="0.4"/>
+  <polygon points="897,178 963,222 938,298 856,298 831,222"
+           fill="none" stroke="#2a4870" stroke-width="0.7" opacity="0.35"/>
+  <polygon points="897,212 923,230 914,258 880,258 871,230"
+           fill="none" stroke="#3a5888" stroke-width="0.9" opacity="0.5"/>
+  <line x1="897" y1="178" x2="897" y2="212" stroke="#2a4870" stroke-width="0.5" opacity="0.3"/>
+  <line x1="963" y1="222" x2="923" y2="230" stroke="#2a4870" stroke-width="0.5" opacity="0.3"/>
+  <line x1="938" y1="298" x2="914" y2="258" stroke="#2a4870" stroke-width="0.5" opacity="0.3"/>
+  <line x1="856" y1="298" x2="880" y2="258" stroke="#2a4870" stroke-width="0.5" opacity="0.3"/>
+  <line x1="831" y1="222" x2="871" y2="230" stroke="#2a4870" stroke-width="0.5" opacity="0.3"/>
+</g>
+
+<!-- ═══ COMPONENT BOXES ═══ -->
+<g id="g-comp">
+  <rect x="8" y="36" width="128" height="50" rx="7"
+        fill="#020e05" stroke="#00a860" stroke-width="1.5"/>
+  <text x="72" y="61" text-anchor="middle" dominant-baseline="central"
+        font-family="'Rubik',sans-serif" font-weight="500" font-size="13" fill="#00d870">Computer</text>
+</g>
+<g id="g-rpi4">
+  <rect x="250" y="36" width="142" height="50" rx="7"
+        fill="#021a18" stroke="#009988" stroke-width="1.5"/>
+  <text x="321" y="61" text-anchor="middle" dominant-baseline="central"
+        font-family="'Rubik',sans-serif" font-weight="500" font-size="13" fill="#00d8c8">Raspberry Pi 4</text>
+</g>
+<g id="g-arduino">
+  <rect x="250" y="110" width="142" height="58" rx="7"
+        fill="#021a18" stroke="#009988" stroke-width="1.5"/>
+  <text x="321" y="139" text-anchor="middle" dominant-baseline="central"
+        font-family="'Rubik',sans-serif" font-weight="500" font-size="13" fill="#00d8c8">Arduino Mega</text>
+</g>
+<g id="g-imu-adc">
+  <rect x="442" y="110" width="118" height="58" rx="7"
+        fill="#020810" stroke="#2090ea" stroke-width="1.5"/>
+  <text font-family="'Rubik',sans-serif" font-weight="500" font-size="12" fill="#70b8ff">
+    <tspan x="501" y="133" text-anchor="middle">ADC</tspan>
+    <tspan x="501" y="150" text-anchor="middle">(ADS1110)</tspan>
+  </text>
+  <rect x="594" y="110" width="138" height="55" rx="7"
+        fill="#020810" stroke="#2090ea" stroke-width="1.5"/>
+  <text font-family="'Rubik',sans-serif" font-weight="500" font-size="12" fill="#70b8ff">
+    <tspan x="663" y="130" text-anchor="middle">IMU</tspan>
+    <tspan x="663" y="147" text-anchor="middle">(MPU9150)</tspan>
+  </text>
+</g>
+<g id="g-lower">
+  <rect x="261" y="197" width="120" height="48" rx="7"
+        fill="#020810" stroke="#1870c8" stroke-width="1.5"/>
+  <text x="321" y="221" text-anchor="middle" dominant-baseline="central"
+        font-family="'Rubik',sans-serif" font-weight="500" font-size="12" fill="#5898d0">MOSFET Board</text>
+  <rect x="394" y="197" width="144" height="48" rx="7"
+        fill="#020810" stroke="#1870c8" stroke-width="1.5"/>
+  <text font-family="'Rubik',sans-serif" font-weight="500" font-size="12" fill="#5898d0">
+    <tspan x="466" y="214" text-anchor="middle">Pressure Sensor</tspan>
+    <tspan x="466" y="230" text-anchor="middle">(MPXH6400A)</tspan>
+  </text>
+  <rect x="551" y="197" width="120" height="48" rx="7"
+        fill="#020810" stroke="#1870c8" stroke-width="1.5"/>
+  <text x="611" y="221" text-anchor="middle" dominant-baseline="central"
+        font-family="'Rubik',sans-serif" font-weight="500" font-size="12" fill="#5898d0">MOSFET Board</text>
+</g>
+<g id="g-psys-boxes">
+  <rect x="271" y="339" width="100" height="50" rx="7"
+        fill="#0d0902" stroke="#c89018" stroke-width="1.5"/>
+  <text x="321" y="364" text-anchor="middle" dominant-baseline="central"
+        font-family="'Rubik',sans-serif" font-weight="500" font-size="13" fill="#e8a828">Pumps</text>
+  <!-- Air Reservoir pentagon cx=466 cy=364 r=40 — large enough for text -->
+  <polygon points="466,324 504,352 489,396 442,396 428,352"
+           fill="#0d0902" stroke="#c89018" stroke-width="1.5"/>
+  <text font-family="'Rubik',sans-serif" font-weight="500" font-size="12" fill="#e8a828">
+    <tspan x="466" y="358" text-anchor="middle">Air</tspan>
+    <tspan x="466" y="374" text-anchor="middle">Reservoir</tspan>
+  </text>
+  <rect x="552" y="339" width="118" height="50" rx="7"
+        fill="#0d0902" stroke="#c89018" stroke-width="1.5"/>
+  <text font-family="'Rubik',sans-serif" font-weight="500" font-size="12" fill="#e8a828">
+    <tspan x="611" y="359" text-anchor="middle">Valve</tspan>
+    <tspan x="611" y="374" text-anchor="middle">Manifold</tspan>
+  </text>
+  <rect x="688" y="339" width="80" height="50" rx="7"
+        fill="#0d0902" stroke="#c89018" stroke-width="1.5"/>
+  <text font-family="'Rubik',sans-serif" font-weight="500" font-size="12" fill="#e8a828">
+    <tspan x="728" y="359" text-anchor="middle">Soft</tspan>
+    <tspan x="728" y="374" text-anchor="middle">Actuators</tspan>
+  </text>
+</g>
+
+<!-- ═══ STATIC CRT CONNECTIONS ═══ -->
+
+<!-- WiFi/SSH: Computer r(136,61) → RPi4 l(250,61) — wireless dashed -->
+<g id="g-wifi">
+  <path class="wifi-glow" d="M136,61 L250,61"/>
+  <path class="wifi-core" d="M136,61 L250,61"
+        marker-start="url(#ahr)" marker-end="url(#ah)"/>
+  <text x="193" y="52" text-anchor="middle"
+        font-family="'Rubik',sans-serif" font-weight="500" font-size="11" fill="#50c0d8">WiFi / SSH</text>
+</g>
+
+<!-- UART: RPi4 bot (321,86) → Arduino top (321,110) straight vertical -->
+<g id="g-uart">
+  <path class="crt-glow" d="M321,86 L321,110"/>
+  <path class="crt-core" d="M321,86 L321,110"
+        marker-start="url(#ahr)" marker-end="url(#ah)"/>
+  <text x="333" y="101" text-anchor="start"
+        font-family="'Rubik',sans-serif" font-weight="500" font-size="11" fill="#50c0d8">UART</text>
+</g>
+
+<!-- I2C connections -->
+<g id="g-i2c">
+  <!-- I2C → ADC: short horizontal (392,139)→(407,139) -->
+  <path class="crt-glow" d="M392,139 L442,139"/>
+  <path class="crt-core" d="M392,139 L442,139"
+        marker-start="url(#ahr)" marker-end="url(#ah)"/>
+  <text x="417" y="155" text-anchor="middle"
+        font-family="'Rubik',sans-serif" font-weight="500" font-size="11" fill="#50c0d8">I²C</text>
+
+  <!-- I2C → IMU: routed ABOVE ADC (top=110) at y=97 -->
+  <path class="crt-glow" d="M417,139 L417,100 L663,100 L663,110"/>
+  <path class="crt-core" d="M417,139 L417,100 L663,100 L663,110"
+        marker-end="url(#ah)"/>
+  <circle cx="417" cy="139" r="3.5" fill="#00d4ff"/>
+  <text x="540" y="93" text-anchor="middle"
+        font-family="'Rubik',sans-serif" font-weight="500" font-size="11" fill="#50c0d8">I²C</text>
+
+  <!-- ADC → Pressure: straight vertical with bridge hop over MOSFET bus at y=183 -->
+  <path class="crt-glow" d="M501,168 L501,179 Q506,183 501,187 L501,190 L466,190 L466,197"/>
+  <path class="crt-core" d="M501,168 L501,179 Q506,183 501,187 L501,190 L466,190 L466,197"
+        marker-end="url(#ah)"/>
+</g>
+
+<!-- MOSFET bus: Arduino (321,168) → y=183 → MOSFET L (321) + MOSFET R (611) -->
+<g id="g-bus">
+  <path class="crt-glow" d="M321,168 L321,183"/>
+  <path class="crt-core" d="M321,168 L321,183"/>
+  <path class="crt-glow" d="M321,183 L611,183"/>
+  <path class="crt-core" d="M321,183 L611,183"/>
+  <path class="crt-glow" d="M321,183 L321,197"/>
+  <path class="crt-core" d="M321,183 L321,197" marker-end="url(#ah)"/>
+  <path class="crt-glow" d="M611,183 L611,197"/>
+  <path class="crt-core" d="M611,183 L611,197" marker-end="url(#ah)"/>
+  <!-- Glowing junction dots -->
+  <circle cx="321" cy="183" r="4"   fill="#00d4ff" opacity="0.8" filter="url(#blur)"/>
+  <circle cx="321" cy="183" r="2.5" fill="#00d4ff"/>
+  <circle cx="611" cy="183" r="4"   fill="#00d4ff" opacity="0.8" filter="url(#blur)"/>
+  <circle cx="611" cy="183" r="2.5" fill="#00d4ff"/>
+</g>
+
+<!-- E-System → Robot thick connection -->
+<g id="g-esys-robot">
+  <path d="M800,139 L820,139" fill="none" stroke="#00d4ff" stroke-width="8" stroke-opacity="0.10" filter="url(#blur)"/>
+  <path d="M800,139 L820,139" fill="none" stroke="#00d4ff" stroke-width="3" stroke-opacity="0.90" marker-end="url(#ah)"/>
+</g>
+
+<!-- ═══ CROSS-SYSTEM: perfectly straight vertical arrows ═══ -->
+<g id="g-cross">
+  <!-- MOSFET L (321,245) → Pumps top (321,339) -->
+  <path class="crt-glow" d="M321,245 L321,339"/>
+  <path class="crt-core" d="M321,245 L321,339" marker-end="url(#ah)"/>
+  <!-- Pressure (466,245) → AirRes top (466,324) -->
+  <path class="crt-glow" d="M466,245 L466,324"/>
+  <path class="crt-core" d="M466,245 L466,324" marker-end="url(#ah)"/>
+  <!-- MOSFET R (611,245) → Valve top (611,339) -->
+  <path class="crt-glow" d="M611,245 L611,339"/>
+  <path class="crt-core" d="M611,245 L611,339" marker-end="url(#ah)"/>
+</g>
+
+<!-- ═══ PNEUMATIC DOUBLE LINES (amber, static, no arrows) ═══ -->
+<!-- Pentagon left vertex ~(428,352); right vertex ~(504,352)
+     At y=361: left edge ≈ x=431, right edge ≈ x=501                -->
+<g id="g-pneum">
+  <path d="M371,361 L431,361" stroke="#c89018" stroke-width="1.4" fill="none"/>
+  <path d="M371,367 L431,367" stroke="#c89018" stroke-width="1.4" fill="none"/>
+  <path d="M501,361 L552,361" stroke="#c89018" stroke-width="1.4" fill="none"/>
+  <path d="M501,367 L552,367" stroke="#c89018" stroke-width="1.4" fill="none"/>
+  <path d="M670,361 L688,361" stroke="#c89018" stroke-width="1.4" fill="none"/>
+  <path d="M670,367 L688,367" stroke="#c89018" stroke-width="1.4" fill="none"/>
+  <!-- Soft Actuators → Robot: single thick amber line (matches E-Sys→Robot style) -->
+  <path d="M768,364 L820,364" fill="none" stroke="#c89018" stroke-width="8" stroke-opacity="0.10" filter="url(#blur)"/>
+  <path d="M768,364 L820,364" fill="none" stroke="#c89018" stroke-width="3" stroke-opacity="0.90" marker-end="url(#ah-amb)"/>
+</g>
+
+</svg>
+
+<script>
+var SEQ = [
+  { id:'g-esys',       delay:  4000, anim:'techAppear 0.55s both' },
+  { id:'g-psys',       delay:  12000, anim:'techAppear 0.55s both' },
+  { id:'g-robot',      delay:  600, anim:'techAppear 0.55s both' },
+  { id:'g-comp',       delay:  600, anim:'techAppear 0.55s both' },
+  { id:'g-rpi4',       delay:  4850, anim:'techAppear 0.55s both' },
+  { id:'g-wifi',       delay: 5150, anim:'fadeIn 0.40s both'     },
+  { id:'g-arduino',    delay: 5400, anim:'techAppear 0.55s both' },
+  { id:'g-uart',       delay: 5700, anim:'fadeIn 0.40s both'     },
+  { id:'g-imu-adc',    delay: 5950, anim:'techAppear 0.55s both' },
+  { id:'g-i2c',        delay: 6250, anim:'fadeIn 0.40s both'     },
+  { id:'g-lower',      delay: 7000, anim:'techAppear 0.55s both' },
+  { id:'g-bus',        delay: 7800, anim:'fadeIn 0.40s both'     },
+  { id:'g-esys-robot', delay: 9500, anim:'fadeIn 0.35s both'     },
+  { id:'g-psys-boxes', delay: 12900, anim:'techAppear 0.55s both' },
+  { id:'g-cross',      delay: 7500, anim:'fadeIn 0.45s both'     },
+  { id:'g-pneum',      delay: 12500, anim:'fadeIn 0.45s both'     }
+];
+var timers = [];
+function startAnimations() {
+  timers.forEach(clearTimeout); timers = [];
+  SEQ.forEach(function(s) {
+    var el = document.getElementById(s.id);
+    if (el) { el.style.animation = 'none'; el.style.opacity = '0'; }
+  });
+  void document.body.offsetWidth;
+  SEQ.forEach(function(s) {
+    timers.push(setTimeout(function() {
+      var el = document.getElementById(s.id);
+      if (el) { el.style.opacity = ''; el.style.animation = s.anim; }
+    }, s.delay));
+  });
+}
+window.addEventListener('load', startAnimations);
+window.addEventListener('message', function(e) { if (e.data==='restart') startAnimations(); });
+</script>
+</body>
+</html>
