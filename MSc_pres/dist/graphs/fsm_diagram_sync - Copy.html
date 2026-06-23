@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:100%; height:100%; background:transparent; }
+svg { width:100%; height:100%; display:block; }
+
+.crt-glow { fill:none; stroke:#00d4ff; stroke-width:5; stroke-opacity:.14; filter:url(#blur); }
+.crt-core { fill:none; stroke:#00d4ff; stroke-width:1.5; stroke-opacity:.90; }
+
+@keyframes techAppear { 0%{opacity:0} 38%{opacity:.7} 52%{opacity:.15} 70%{opacity:.9} 100%{opacity:1} }
+@keyframes fadeIn     { from{opacity:0} to{opacity:1} }
+
+#g-idle,#g-ts,#g-ta,#g-tf,#g-se,#g-tr,
+#g-init,#g-a1,#g-a2,#g-a3,#g-a4,#g-a5,#g-a6,#g-a7,#g-a8 { opacity:0; }
+
+
+/* ══════════════════════════════════════════════════════════════
+   LIVE FSM STATE HIGHLIGHT — controlled by dodecahedron_fsm.js
+   ══════════════════════════════════════════════════════════════ */
+@keyframes fsmLivePulse {
+  0%, 100% { filter: drop-shadow(0 0 7px currentColor) drop-shadow(0 0 14px currentColor); }
+  50%      { filter: drop-shadow(0 0 14px currentColor) drop-shadow(0 0 28px currentColor); }
+}
+
+@keyframes fsmArrowPulse {
+  0%, 100% { stroke-opacity:.65; }
+  50%      { stroke-opacity:1; }
+}
+
+#g-idle,#g-ts,#g-ta,#g-tf,#g-se,#g-tr,
+#g-a1,#g-a2,#g-a3,#g-a4,#g-a5,#g-a6,#g-a7,#g-a8 {
+  transition: opacity .25s ease, transform .25s ease, filter .25s ease;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.fsm-node-active {
+  opacity: 1 !important;
+  transform: scale(1.045);
+}
+
+.fsm-node-active circle:first-child {
+  stroke-opacity: .58 !important;
+  stroke-width: 12 !important;
+}
+
+.fsm-node-active circle:nth-child(2) {
+  stroke-width: 3.2 !important;
+}
+
+.fsm-node-active text {
+  animation: fsmLivePulse 1.15s ease-in-out infinite;
+}
+
+.fsm-arrow-active .crt-glow {
+  stroke-opacity: .42 !important;
+  stroke-width: 8 !important;
+}
+
+.fsm-arrow-active .crt-core {
+  stroke-opacity: 1 !important;
+  stroke-width: 2.8 !important;
+  animation: fsmArrowPulse .9s ease-in-out infinite;
+}
+
+body[data-active-fsm-state="IDLE"] #g-idle text { color:#8aa8ff; }
+body[data-active-fsm-state="TILTING_START"] #g-ts text { color:#00d4ff; }
+body[data-active-fsm-state="TILTING_ACTIVE"] #g-ta text { color:#20d870; }
+body[data-active-fsm-state="TILTING_FINAL"] #g-tf text { color:#e8a828; }
+body[data-active-fsm-state="SETTLING"] #g-se text { color:#b870e8; }
+body[data-active-fsm-state="TRANSITION"] #g-tr text { color:#e86060; }
+
+</style>
+</head>
+<body>
+<!--
+  FSM Layout (ViewBox 820×500):
+  ─────────────────────────────────────────────────────
+  IDLE         cx=82   cy=248  r=52
+  TILTING START  cx=292  cy=108  r=52
+  TILTING ACTIVE cx=516  cy=108  r=52
+  TILTING FINAL  cx=715  cy=248  r=52
+  SETTLING       cx=516  cy=392  r=52
+  TRANSITION     cx=292  cy=392  r=52
+
+  Arrow endpoints (on circle boundary, r=52):
+  IDLE→TS:   (126,215) → (248,137)      dir=(0.843,-0.538)
+  TS→TA:     (344,108) → (464,108)      horizontal
+  TA→TF:     (558,136) → (671,219)      dir=(0.824,0.566)
+  TF→SE:     (673,275) → (558,362)      dir=(-0.818,0.575)
+  SE→TR:     (464,392) → (344,392)      horizontal
+  TR→TS:     (292,340) → (292,160)      vertical (both cx=292)
+  TR→IDLE:   curve from TR left → IDLE bottom-left
+  TR self:   loop from (268,438) → (316,438) below circle
+  ─────────────────────────────────────────────────────
+-->
+<svg viewBox="0 0 820 500" xmlns="http://www.w3.org/2000/svg"
+     preserveAspectRatio="xMidYMid meet">
+<defs>
+  <filter id="blur" x="-400%" y="-400%" width="900%" height="900%">
+    <feGaussianBlur stdDeviation="3" in="SourceGraphic"/>
+  </filter>
+  <!-- Cyan arrowhead -->
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5"
+          markerWidth="5.5" markerHeight="5.5" orient="auto">
+    <path d="M1,1.5 L9,5 L1,8.5 Z" fill="#00d4ff"/>
+  </marker>
+</defs>
+
+<!-- ═══ STATE CIRCLES ═══ -->
+
+<!-- IDLE — neutral gray-blue -->
+<g id="g-idle">
+  <circle cx="82" cy="248" r="58" fill="none" stroke="#607888" stroke-width="8"
+          stroke-opacity=".16" filter="url(#blur)"/>
+  <circle cx="82" cy="248" r="52" fill="#0a1420" stroke="#607888" stroke-width="1.5"/>
+  <text x="82" y="248" text-anchor="middle" dominant-baseline="central"
+        font-family="'Rubik',sans-serif" font-weight="500" font-size="18"
+        fill="#8898a8" letter-spacing="1">IDLE</text>
+</g>
+
+<!-- TILTING START — teal -->
+<g id="g-ts">
+  <circle cx="292" cy="108" r="58" fill="none" stroke="#0099aa" stroke-width="8"
+          stroke-opacity=".16" filter="url(#blur)"/>
+  <circle cx="292" cy="108" r="52" fill="#031818" stroke="#0099aa" stroke-width="1.5"/>
+  <text text-anchor="middle" font-family="'Rubik',sans-serif" font-weight="500"
+        font-size="15.5" fill="#00c8d8" letter-spacing="0.5">
+    <tspan x="292" y="99">TILTING</tspan>
+    <tspan x="292" dy="20">START</tspan>
+  </text>
+</g>
+
+<!-- TILTING ACTIVE — green -->
+<g id="g-ta">
+  <circle cx="516" cy="108" r="58" fill="none" stroke="#10a850" stroke-width="8"
+          stroke-opacity=".16" filter="url(#blur)"/>
+  <circle cx="516" cy="108" r="52" fill="#031508" stroke="#10a850" stroke-width="1.5"/>
+  <text text-anchor="middle" font-family="'Rubik',sans-serif" font-weight="500"
+        font-size="15.5" fill="#20d870" letter-spacing="0.5">
+    <tspan x="516" y="99">TILTING</tspan>
+    <tspan x="516" dy="20">ACTIVE</tspan>
+  </text>
+</g>
+
+<!-- TILTING FINAL — amber -->
+<g id="g-tf">
+  <circle cx="715" cy="248" r="58" fill="none" stroke="#c89018" stroke-width="8"
+          stroke-opacity=".16" filter="url(#blur)"/>
+  <circle cx="715" cy="248" r="52" fill="#150e02" stroke="#c89018" stroke-width="1.5"/>
+  <text text-anchor="middle" font-family="'Rubik',sans-serif" font-weight="500"
+        font-size="15.5" fill="#e8a828" letter-spacing="0.5">
+    <tspan x="715" y="239">TILTING</tspan>
+    <tspan x="715" dy="20">FINAL</tspan>
+  </text>
+</g>
+
+<!-- SETTLING — purple -->
+<g id="g-se">
+  <circle cx="516" cy="392" r="58" fill="none" stroke="#9050c8" stroke-width="8"
+          stroke-opacity=".16" filter="url(#blur)"/>
+  <circle cx="516" cy="392" r="52" fill="#130820" stroke="#9050c8" stroke-width="1.5"/>
+  <text x="516" y="392" text-anchor="middle" dominant-baseline="central"
+        font-family="'Rubik',sans-serif" font-weight="500" font-size="17"
+        fill="#b870e8" letter-spacing="0.5">SETTLING</text>
+</g>
+
+<!-- TRANSITION — coral-red -->
+<g id="g-tr">
+  <circle cx="292" cy="392" r="58" fill="none" stroke="#c84040" stroke-width="8"
+          stroke-opacity=".16" filter="url(#blur)"/>
+  <circle cx="292" cy="392" r="52" fill="#1e0808" stroke="#c84040" stroke-width="1.5"/>
+  <text x="292" y="392" text-anchor="middle" dominant-baseline="central"
+        font-family="'Rubik',sans-serif" font-weight="500" font-size="15"
+        fill="#e86060" letter-spacing="0.5">TRANSITION</text>
+</g>
+
+
+<!-- ═══ ARROWS ═══ -->
+
+<!-- Initial entry → IDLE -->
+<g id="g-init">
+  <path class="crt-glow" d="M12,248 L30,248"/>
+  <path class="crt-core" d="M12,248 L30,248" marker-end="url(#ah)"/>
+</g>
+
+<!-- 1. IDLE → TILTING START: initialize() -->
+<!-- From IDLE (82,248) toward TS (292,108): dir=(210,-140) |L|=252 → unit=(0.833,-0.555) -->
+<!-- start=(82+52*0.833, 248-52*0.555)=(125.3,219.1)   end=(292-52*0.833,108+52*0.555)=(248.7,136.9) -->
+<g id="g-a1">
+  <path class="crt-glow" d="M126,219 L249,137"/>
+  <path class="crt-core" d="M126,219 L249,137" marker-end="url(#ah)"/>
+  <text font-family="'Rubik',sans-serif" font-size="11" fill="#7ab0cc">
+    <tspan x="150" y="161">initialize()</tspan>
+  </text>
+</g>
+
+<!-- 2. TILTING START → TILTING ACTIVE: record initial angle -->
+<g id="g-a2">
+  <path class="crt-glow" d="M344,108 L464,108"/>
+  <path class="crt-core" d="M344,108 L464,108" marker-end="url(#ah)"/>
+  <text text-anchor="middle" font-family="'Rubik',sans-serif" font-size="11" fill="#7ab0cc">
+    <tspan x="404" y="90">record initial</tspan>
+    <tspan x="404" dy="13">angle</tspan>
+  </text>
+</g>
+
+<!-- 3. TILTING ACTIVE → TILTING FINAL: angle_diff > ANGLE_THRESHOLD_1 -->
+<!-- TA(516,108)→TF(715,248): dir=(199,140) |L|=243.5 → unit=(0.817,0.575) -->
+<!-- start=(516+52*0.817,108+52*0.575)=(558.5,137.9)  end=(715-52*0.817,248-52*0.575)=(672.5,218.1) -->
+<g id="g-a3">
+  <path class="crt-glow" d="M558,138 L672,218"/>
+  <path class="crt-core" d="M558,138 L672,218" marker-end="url(#ah)"/>
+  <text text-anchor="start" font-family="'Rubik',sans-serif" font-size="11" fill="#7ab0cc">
+    <tspan x="636" y="158">angle_diff &gt;</tspan>
+    <tspan x="636" dy="13">ANGLE_THRESHOLD_1</tspan>
+  </text>
+</g>
+
+<!-- 4. TILTING FINAL → SETTLING: angle_diff > ANGLE_THRESHOLD_2 -->
+<!-- TF(715,248)→SE(516,392): dir=(-199,144) |L|=245.4 → unit=(-0.811,0.587) -->
+<!-- start=(715-52*0.811,248+52*0.587)=(672.8,278.5)  end=(516+52*0.811,392-52*0.587)=(558.2,361.5) -->
+<g id="g-a4">
+  <path class="crt-glow" d="M673,278 L558,362"/>
+  <path class="crt-core" d="M673,278 L558,362" marker-end="url(#ah)"/>
+  <text text-anchor="start" font-family="'Rubik',sans-serif" font-size="11" fill="#7ab0cc">
+    <tspan x="638" y="318">angle_diff &gt;</tspan>
+    <tspan x="638" dy="13">ANGLE_THRESHOLD_2</tspan>
+  </text>
+</g>
+
+<!-- 5. SETTLING → TRANSITION: detected_face == target_face -->
+<g id="g-a5">
+  <path class="crt-glow" d="M464,392 L344,392"/>
+  <path class="crt-core" d="M464,392 L344,392" marker-end="url(#ah)"/>
+  <text text-anchor="middle" font-family="'Rubik',sans-serif" font-size="11" fill="#7ab0cc">
+    <tspan x="404" y="412">detected_face ==</tspan>
+    <tspan x="404" dy="13">target_face</tspan>
+  </text>
+</g>
+
+<!-- 6. TRANSITION → TILTING START: next step / transition_to_next() -->
+<!-- Both at cx=292. TR top=(292,340) TS bottom=(292,160) — straight vertical -->
+<g id="g-a6">
+  <path class="crt-glow" d="M292,340 L292,160"/>
+  <path class="crt-core" d="M292,340 L292,160" marker-end="url(#ah)"/>
+  <text text-anchor="end" font-family="'Rubik',sans-serif" font-size="11" fill="#7ab0cc">
+    <tspan x="280" y="244">next step /</tspan>
+    <tspan x="280" dy="14">transition_to_next()</tspan>
+  </text>
+</g>
+
+<!-- 7. TRANSITION self-loop: wait for stability -->
+<!-- Loop below TRANSITION circle (cy=392 r=52 → bottom=444)
+     Start (268,438)≈220° End (316,438)≈320°; control points go below -->
+<g id="g-a7">
+  <path class="crt-glow" d="M268,438 C230,482 354,482 316,438"/>
+  <path class="crt-core" d="M268,438 C230,482 354,482 316,438" marker-end="url(#ah)"/>
+  <text x="292" y="493" text-anchor="middle"
+        font-family="'Rubik',sans-serif" font-size="11" fill="#7ab0cc">
+    wait for stability
+  </text>
+</g>
+
+<!-- 8. TRANSITION → IDLE: path complete -->
+<!-- Exit TR at left-lower area (230,370), curve left to IDLE bottom-left (38,278) -->
+<!-- IDLE bottom-left: (82+52*cos210°, 248+52*sin210°)=(82-45,248-26)=(37,222) →
+     Let's use (38,222) as entry to IDLE from upper-left for clarity.
+     Actually let's aim for the left of IDLE at y=260: (30,260) -->
+<g id="g-a8">
+  <path class="crt-glow" d="M249,363 L130,268"/>
+  <path class="crt-core" d="M249,363 L130,268" marker-end="url(#ah)"/>
+  <text x="200" y="308" text-anchor="start" font-family="'Rubik',sans-serif" font-size="11" fill="#7ab0cc">path complete</text>
+</g>
+
+</svg>
+
+<script>
+/*
+  This diagram can still play its initial reveal animation, but its live glow is
+  now controlled by dodecahedron_fsm.js through postMessage().
+
+  Accepted message formats:
+    { type: 'ROLLING_FSM_STATE', state: 'IDLE' }
+    { type: 'ROLLING_FSM_STATE', state: 'TILTING_START' }
+    { type: 'ROLLING_FSM_STATE', state: 'TILTING_ACTIVE' }
+    { type: 'ROLLING_FSM_STATE', state: 'TILTING_FINAL' }
+    { type: 'ROLLING_FSM_STATE', state: 'SETTLING' }
+    { type: 'ROLLING_FSM_STATE', state: 'TRANSITION' }
+    { type: 'RESTART_FSM_DIAGRAM' }
+*/
+
+var STATE_TO_NODE = {
+  IDLE: 'g-idle',
+  TILTING_START: 'g-ts',
+  TILTING_ACTIVE: 'g-ta',
+  TILTING_FINAL: 'g-tf',
+  SETTLING: 'g-se',
+  TRANSITION: 'g-tr'
+};
+
+// This highlights the arrow that logically leads into the active state.
+// Set this to true if you also want the incoming transition arrow to glow.
+// Default is false because the user request was state glow only.
+var HIGHLIGHT_INCOMING_ARROW = false;
+var STATE_TO_INCOMING_ARROW = {
+  IDLE: 'g-a8',
+  TILTING_START: 'g-a1',
+  TILTING_ACTIVE: 'g-a2',
+  TILTING_FINAL: 'g-a3',
+  SETTLING: 'g-a4',
+  TRANSITION: 'g-a5'
+};
+
+var SEQ = [
+  { id:'g-idle', delay:  80, anim:'techAppear 0.55s both' },
+  { id:'g-ts',   delay: 280, anim:'techAppear 0.55s both' },
+  { id:'g-ta',   delay: 460, anim:'techAppear 0.55s both' },
+  { id:'g-tf',   delay: 640, anim:'techAppear 0.55s both' },
+  { id:'g-se',   delay: 820, anim:'techAppear 0.55s both' },
+  { id:'g-tr',   delay:1000, anim:'techAppear 0.55s both' },
+  { id:'g-init', delay:1350, anim:'fadeIn 0.35s both'     },
+  { id:'g-a1',   delay:1550, anim:'fadeIn 0.40s both'     },
+  { id:'g-a2',   delay:1750, anim:'fadeIn 0.40s both'     },
+  { id:'g-a3',   delay:1950, anim:'fadeIn 0.40s both'     },
+  { id:'g-a4',   delay:2150, anim:'fadeIn 0.40s both'     },
+  { id:'g-a5',   delay:2350, anim:'fadeIn 0.40s both'     },
+  { id:'g-a6',   delay:2550, anim:'fadeIn 0.40s both'     },
+  { id:'g-a7',   delay:2750, anim:'fadeIn 0.40s both'     },
+  { id:'g-a8',   delay:2950, anim:'fadeIn 0.40s both'     }
+];
+
+var timers = [];
+var currentState = null;
+
+function clearLiveHighlights() {
+  Object.keys(STATE_TO_NODE).forEach(function(state) {
+    var node = document.getElementById(STATE_TO_NODE[state]);
+    if (node) node.classList.remove('fsm-node-active');
+  });
+
+  Object.keys(STATE_TO_INCOMING_ARROW).forEach(function(state) {
+    var arrow = document.getElementById(STATE_TO_INCOMING_ARROW[state]);
+    if (arrow) arrow.classList.remove('fsm-arrow-active');
+  });
+}
+
+function setFSMState(state) {
+  if (!STATE_TO_NODE[state]) return;
+
+  currentState = state;
+  document.body.dataset.activeFsmState = state;
+  clearLiveHighlights();
+
+  var node = document.getElementById(STATE_TO_NODE[state]);
+  if (node) {
+    node.style.opacity = '1';
+    node.classList.add('fsm-node-active');
+  }
+
+  if (HIGHLIGHT_INCOMING_ARROW) {
+    var arrowId = STATE_TO_INCOMING_ARROW[state];
+    var arrow = arrowId ? document.getElementById(arrowId) : null;
+    if (arrow) {
+      arrow.style.opacity = '1';
+      arrow.classList.add('fsm-arrow-active');
+    }
+  }
+}
+
+function startAnimations() {
+  timers.forEach(clearTimeout);
+  timers = [];
+  clearLiveHighlights();
+
+  SEQ.forEach(function(s) {
+    var el = document.getElementById(s.id);
+    if (el) {
+      el.style.animation = 'none';
+      el.style.opacity = '0';
+    }
+  });
+
+  void document.body.offsetWidth;
+
+  SEQ.forEach(function(s) {
+    timers.push(setTimeout(function() {
+      var el = document.getElementById(s.id);
+      if (el) {
+        el.style.opacity = '';
+        el.style.animation = s.anim;
+      }
+    }, s.delay));
+  });
+
+  if (currentState) {
+    // Re-apply live state after the intro reset.
+    timers.push(setTimeout(function() {
+      setFSMState(currentState);
+    }, 3100));
+  }
+}
+
+window.addEventListener('load', function() {
+  startAnimations();
+  setFSMState('IDLE');
+});
+
+window.addEventListener('message', function(e) {
+  var data = e.data;
+
+  // Backward compatibility with the original file.
+  if (data === 'restart') {
+    startAnimations();
+    return;
+  }
+
+  if (!data || typeof data !== 'object') return;
+
+  if (data.type === 'RESTART_FSM_DIAGRAM') {
+    startAnimations();
+    return;
+  }
+
+  if (data.type === 'ROLLING_FSM_STATE') {
+    setFSMState(data.state);
+  }
+});
+</script>
+</body>
+</html>

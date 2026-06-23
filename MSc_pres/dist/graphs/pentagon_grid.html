@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pentagon Grid</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: transparent; width: 100vw; height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+  svg { width: 100vw; height: 100vh; }
+</style>
+</head>
+<body>
+<svg id="canvas" viewBox="-178 -178 356 356">
+  <defs>
+    <filter id="glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="rglow" x="-200%" y="-200%" width="500%" height="500%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <g id="scene"></g>
+  <!-- robot marker renders above all pentagons -->
+  <circle id="robot" r="2.2" cx="0" cy="0" fill="#ffffff" filter="url(#rglow)" opacity="0"/>
+</svg>
+
+<script>
+(function () {
+  const R  = 30;
+  const NS = 'http://www.w3.org/2000/svg';
+  const a  = R * Math.cos(Math.PI / 5);
+  const D  = 2 * a;   // shared-side distance between pentagon centres
+
+  const scene   = document.getElementById('scene');
+  const robotEl = document.getElementById('robot');
+
+  // ── 1. Build pentagons (3 layers) ──────────────────────────────────
+
+  const pens   = [];          // { cx, cy, rot, layer, el, baseOp }
+  const posSet = new Set();
+
+  function addPen(cx, cy, rot, layer) {
+    const key = `${Math.round(cx * 10)},${Math.round(cy * 10)}`;
+    if (posSet.has(key)) return -1;
+    posSet.add(key);
+    const pts = Array.from({ length: 5 }, (_, k) => {
+      const ang = rot * Math.PI / 180 - Math.PI / 2 + k * 2 * Math.PI / 5;
+      return `${(cx + R * Math.cos(ang)).toFixed(3)},${(cy + R * Math.sin(ang)).toFixed(3)}`;
+    }).join(' ');
+    const el = document.createElementNS(NS, 'polygon');
+    el.setAttribute('points', pts);
+    scene.appendChild(el);
+    const id = pens.length;
+    pens.push({ cx, cy, rot, layer, el, baseOp: [1, .7, .4, .2][layer] });
+    return id;
+  }
+
+  function buildLayer(parentIds, layer) {
+    const out = [];
+    for (const pid of parentIds) {
+      const { cx: px, cy: py, rot: pr } = pens[pid];
+      for (let j = 1; j <= 4; j++) {
+        const rad = (pr - 54 + j * 72) * Math.PI / 180;
+        const id = addPen(
+          px + D * Math.cos(rad),
+          py + D * Math.sin(rad),
+          ((pr + j * 72 + 180) % 360 + 360) % 360,
+          layer
+        );
+        if (id !== -1) out.push(id);
+      }
+    }
+    return out;
+  }
+
+  addPen(0, 0, 0, 0);   // id 0  — centre
+
+  const l1Ids = Array.from({ length: 5 }, (_, i) => {
+    const rad = (-54 + i * 72) * Math.PI / 180;
+    return addPen(D * Math.cos(rad), D * Math.sin(rad), 180 + i * 72, 1);
+  });                    // ids 1–5
+
+  const l2Ids = buildLayer(l1Ids, 2);   // ids 6–25
+  buildLayer(l2Ids, 3);                  // ids 26–N  (L3 — adds cross-connections)
+
+  // ── 2. Neighbour graph (side-sharing = distance ≈ D) ───────────────
+
+  const nbrs = pens.map(() => []);
+  for (let i = 0; i < pens.length; i++)
+    for (let j = i + 1; j < pens.length; j++) {
+      const dx = pens[i].cx - pens[j].cx, dy = pens[i].cy - pens[j].cy;
+      if (Math.abs(Math.hypot(dx, dy) - D) < 0.6) {
+        nbrs[i].push(j); nbrs[j].push(i);
+      }
+    }
+
+  // ── 3. Path finding ────────────────────────────────────────────────
+  //
+  //  TURN_BACK  0.0 → always picks the most outward neighbour (straight)
+  //             1.0 → picks randomly among all neighbours (fully crooked)
+  //             in between → smooth blend
+  //
+  const TURN_BACK = 0.7;
+
+  function prng(arm, step) {
+    const x = Math.sin(arm * 127.1 + step * 311.7) * 43758.5453;
+    return x - Math.floor(x);
+  }
+
+  function findPath(startId, armIdx) {
+    const { cx: sx, cy: sy } = pens[startId];
+    const fLen = Math.hypot(sx, sy);
+    const fwdX = sx / fLen, fwdY = sy / fLen;
+
+    const path = [0, startId];
+    const vis  = new Set([0, startId]);
+    let cur = startId;
+
+    for (let step = 0; step < 7; step++) {
+      const candidates = nbrs[cur].filter(n => !vis.has(n));
+      if (!candidates.length) break;
+
+      candidates.sort((a, b) => {
+        function score(id) {
+          const relX = pens[id].cx - pens[cur].cx;
+          const relY = pens[id].cy - pens[cur].cy;
+          // deterministic: prefer forward direction + higher layer
+          const det   = (relX * fwdX + relY * fwdY) + pens[id].layer * 10;
+          // noise: scaled by TURN_BACK, seeded so paths are fixed per value
+          const noise = prng(armIdx, step * 97 + id) * TURN_BACK * 200;
+          return det * (1 - TURN_BACK) + noise;
+        }
+        return score(b) - score(a);
+      });
+
+      const next = candidates[0];
+      vis.add(next); path.push(next);
+      cur = next;
+    }
+
+    return path;
+  }
+
+  const paths = l1Ids.map((id, i) => findPath(id, i));
+
+  // ── 4. Animation ───────────────────────────────────────────────────
+
+  const STEP_MS = 400, HOLD_MS = 700, GAP_MS = 1000;
+
+  let pathIdx = 0, stepIdx = 0;
+  const mode    = new Array(pens.length).fill('idle');  // 'idle'|'lit'|'trail'
+  const trailOp = pens.map(p => p.baseOp);
+
+  // Robot position (lerped)
+  let rTX = 0, rTY = 0, rCX = 0, rCY = 0, rOp = 0, rOn = false;
+
+  function doStep() {
+    const path = paths[pathIdx];
+    if (stepIdx < path.length) {
+      // Move trail
+      if (stepIdx > 0) {
+        const prev = path[stepIdx - 1];
+        mode[prev] = 'trail';
+        trailOp[prev] = 0.95;
+      }
+      // Light up current
+      const id = path[stepIdx++];
+      mode[id] = 'lit';
+      rTX = pens[id].cx; rTY = pens[id].cy; rOn = true;
+      setTimeout(doStep, STEP_MS);
+    } else {
+      // Hold, then clear and start next path
+      setTimeout(() => {
+        mode.fill('idle');
+        pens.forEach((p, i) => (trailOp[i] = p.baseOp));
+        rOn = false;
+        pathIdx = (pathIdx + 1) % paths.length;
+        stepIdx = 0;
+        setTimeout(doStep, GAP_MS);
+      }, HOLD_MS);
+    }
+  }
+
+  // ── 5. Render loop ─────────────────────────────────────────────────
+
+  let phase = 0;
+
+  function frame() {
+    phase += 0.001;
+
+    pens.forEach((p, i) => {
+      const el = p.el;
+      const m  = mode[i];
+
+      if (m === 'idle') {
+        // Breathing: each pentagon has its own phase offset
+        const w  = (Math.sin(phase + i * 0.9) + 1) / 2;
+        el.style.opacity     = (p.baseOp * (0.38 + 0.62 * w)).toFixed(3);
+        el.style.stroke      = '#00aaff';
+        el.style.strokeWidth = '0.5';
+        el.style.fill        = 'rgba(0,170,255,0.02)';
+        el.style.filter      = '';
+
+      } else if (m === 'lit') {
+        el.style.opacity     = '1';
+        el.style.stroke      = '#00ffff';
+        el.style.strokeWidth = '1.8';
+        el.style.fill        = 'rgba(0,255,255,0.08)';
+        el.style.filter      = 'url(#glow)';
+
+      } else {  // trail
+        // Decay toward a dim floor then hand off to idle
+        trailOp[i] = Math.max(p.baseOp * 0.42, trailOp[i] - 0.012);
+        el.style.opacity     = trailOp[i].toFixed(3);
+        el.style.stroke      = '#00ccff';
+        el.style.strokeWidth = '0.9';
+        el.style.fill        = 'rgba(0,200,255,0.04)';
+        el.style.filter      = '';
+        if (trailOp[i] <= p.baseOp * 0.42) mode[i] = 'idle';
+      }
+    });
+
+    // Robot: smooth lerp + fade
+    rOp = rOn ? Math.min(1, rOp + 0.08) : Math.max(0, rOp - 0.06);
+    rCX += (rTX - rCX) * 0.1;
+    rCY += (rTY - rCY) * 0.1;
+    robotEl.setAttribute('cx', rCX.toFixed(2));
+    robotEl.setAttribute('cy', rCY.toFixed(2));
+    robotEl.style.opacity = rOp.toFixed(3);
+
+    requestAnimationFrame(frame);
+  }
+
+  requestAnimationFrame(frame);
+  setTimeout(doStep, 800);
+})();
+</script>
+</body>
+</html>

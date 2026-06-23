@@ -1,0 +1,110 @@
+<!-- Put this <section> inside your Reveal .slides container. -->
+<section data-three-state="dodecahedron-fsm" class="fsm-rolling-slide">
+  <div class="fsm-sync-layout">
+    <div class="fsm-panel fsm-scene-panel">
+      <div class="fsm-panel-title">Rolling Motion</div>
+      <div id="dodecahedronFsmMount"></div>
+    </div>
+
+    <div class="fsm-panel fsm-diagram-panel">
+      <div class="fsm-panel-title">Finite State Machine</div>
+      <iframe
+        id="rollingFsmFrame"
+        data-fsm-diagram="rolling"
+        src="fsm_diagram_sync.html"
+        title="Rolling robot FSM diagram"
+        loading="eager">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<!-- Add this CSS once, either inside index.html or your main presentation CSS file. -->
+<style>
+.fsm-rolling-slide {
+  --fsm-cyan: rgba(0, 229, 255, 0.82);
+  --fsm-panel-bg: linear-gradient(165deg, rgba(4,24,56,0.70), rgba(1,10,28,0.86));
+}
+
+.fsm-sync-layout {
+  width: 94%;
+  height: 72vh;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
+.fsm-panel {
+  position: relative;
+  min-height: 0;
+  border-radius: 18px;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 18% 16%, rgba(0,229,255,0.055), transparent 32%),
+    radial-gradient(circle at 86% 82%, rgba(0,229,255,0.035), transparent 30%),
+    var(--fsm-panel-bg);
+  border: 1px solid rgba(0,229,255,0.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    0 0 0 1px rgba(0,229,255,0.05),
+    0 18px 45px rgba(0,0,0,0.34),
+    0 0 36px rgba(0,229,255,0.08);
+}
+
+.fsm-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent, rgba(0,229,255,0.08), transparent) 0 0 / 240% 100%,
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.018) 0 1px, transparent 1px 7px);
+  opacity: 0.45;
+  z-index: 2;
+}
+
+.fsm-panel-title {
+  position: absolute;
+  top: 14px;
+  left: 18px;
+  z-index: 3;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font: 600 13px/1.2 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: rgba(220, 250, 255, 0.92);
+  background: rgba(0, 15, 38, 0.46);
+  border: 1px solid rgba(0,229,255,0.18);
+  backdrop-filter: blur(10px);
+}
+
+#dodecahedronFsmMount {
+  position: absolute;
+  inset: 42px 10px 10px 10px;
+  border-radius: 14px;
+}
+
+.fsm-diagram-panel iframe {
+  position: absolute;
+  inset: 42px 10px 10px 10px;
+  width: calc(100% - 20px);
+  height: calc(100% - 52px);
+  border: 0;
+  background: transparent;
+  z-index: 1;
+}
+
+@media (max-width: 980px) {
+  .fsm-sync-layout {
+    grid-template-columns: 1fr;
+    height: 82vh;
+  }
+}
+</style>
+
+<!-- Add this module import once in index.html, after Reveal is available. -->
+<script type="module" src="./reveal_dodecahedron_fsm_integration.js"></script>
