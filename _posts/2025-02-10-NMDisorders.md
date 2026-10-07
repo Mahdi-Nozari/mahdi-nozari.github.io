@@ -1,6 +1,6 @@
 ---
 title: "Modeling Neuromuscular Hand Disorders"
-date: 2025-02-10 00:00:00 +0350+
+date: 2025-02-10 00:00:00 +0330
 type: "Projects"
 order: 7
 # categories: [Projects]

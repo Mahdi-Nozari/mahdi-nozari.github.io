@@ -25,10 +25,7 @@ description: >- # used by seo meta and the atom feed
 url: "https://mahdi-nozari.github.io"
 
 github:
-  username: Morphit # change to your GitHub username
-
-twitter:
-  username: twitter_username # change to your Twitter username
+  username: Mahdi-Nozari
 
 social:
   # Change to your full name.
@@ -38,7 +35,8 @@ social:
   links:
     # The first element serves as the copyright owner's link
     # - https://twitter.com/username # change to your Twitter homepage
-    - https://github.com/username # change to your GitHub homepage
+    - https://github.com/Mahdi-Nozari
+    - https://www.linkedin.com/in/mahdi-nozari-47ab06167/
     # Uncomment below to add more social links
     # - https://www.facebook.com/username
     # - https://www.linkedin.com/in/username
@@ -144,7 +142,8 @@ pwa:
     # Usually its value is the `baseurl` of another website that
     # shares the same domain name as the current website.
     deny_paths:
-      # - "/example"  # URLs match `<SITE_URL>/example/*` will not be cached by the PWA
+      - "/RollyPoly/"
+      - "/MSc_pres/"
 
 paginate: 10
 
@@ -209,11 +208,29 @@ exclude:
   - "*.gemspec"
   - docs
   - tools
+  - .test-results
   - README.md
   - LICENSE
   - purgecss.js
   - rollup.config.js
   - "package*.json"
+  - "**/node_modules"
+  - "**/package*.json"
+  - "**/gulpfile.js"
+  - Gemfile.lock
+  - dfsdf
+  # These presentations already bundle Reveal.js into their entry scripts.
+  - RollyPoly/reveal.js
+  - MSc_pres/reveal.js
+  - MSc_pres/dist
+  - RollyPoly/Robot3D/dist
+  - RollyPoly/Robot3D/assets
+  - "RollyPoly/Robot3D/threejs/*.glb"
+  # Unused authoring examples, rather than the diagrams embedded in slides.
+  - RollyPoly/graphs/index.html
+  - MSc_pres/graphs/index.html
+  - MSc_pres/graphs/reveal_fsm_slide_snippet.html
+  - "MSc_pres/graphs/* - Copy.html"
 
 jekyll-archives:
   enabled: [categories, tags]

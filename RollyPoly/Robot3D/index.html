@@ -2,13 +2,14 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="icon" href="/assets/img/favicons/favicon.ico">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 		<title>Rolling Soft Polyhedral Robot</title>
 
-		<link rel="stylesheet" href="dist/reset.css">
-		<link rel="stylesheet" href="dist/reveal.css">
-		<link rel="stylesheet" href="dist/theme/black.css">
+		<link rel="stylesheet" href="reset.css">
+		<link rel="stylesheet" href="reveal.css">
+		<link rel="stylesheet" href="theme/black.css">
 		<link rel="stylesheet" href="plugin/highlight/monokai.css">
 
 		<script type="importmap">
@@ -73,13 +74,14 @@
 			</div>
 		</div>
 
-		<script src="dist/reveal.js"></script>
+		<script src="reveal.js"></script>
 		<script src="plugin/notes/notes.js"></script>
 		<script src="plugin/markdown/markdown.js"></script>
 		<script src="plugin/highlight/highlight.js"></script>
 		<script>
 			Reveal.initialize({
 				hash: true,
+                scrollActivationWidth: null,
 				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
 			});
 		</script>

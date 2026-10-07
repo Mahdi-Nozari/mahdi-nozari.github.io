@@ -1,6 +1,6 @@
 ---
 title: "Designing and Building FDM 3D Printers"
-date: 2025-02-10 00:00:00 +0350+
+date: 2025-02-10 00:00:00 +0330
 type: "Projects"
 order: 10
 # categories: [Projects]

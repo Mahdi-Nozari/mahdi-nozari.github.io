@@ -2,8 +2,9 @@
 <html lang="fa">
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" href="/assets/img/favicons/favicon.ico">
   <title>ربات چندوجهی غلتان نرم – مهدی نوذری</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
     /* ══════════════════════════════════════════════════════════════
@@ -887,21 +888,22 @@
     defer
     src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
   </script>
-  <script type="module" crossorigin src="/assets/index-CW--XHmN.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-C4zd6xHX.css">
+  <script type="module" crossorigin src="/MSc_pres/assets/index-a1c6fdb9.js"></script>
+  <link rel="stylesheet" crossorigin href="/MSc_pres/assets/index-92ddce8a.css">
+  <link rel="stylesheet" href="/assets/css/presentation.css">
 </head>
 <body>
   <div class="grid-background"></div>
 
   <!-- TOP NAVIGATION — 6 items -->
-  <div class="top-nav">
-    <span id="nav-intro">مقدمه</span>
-    <span id="nav-background">پیشینه</span>
-    <span id="nav-design">طراحی</span>
-    <span id="nav-fabrication">ساخت</span>
-    <span id="nav-results">نتایج</span>
-    <span id="nav-conclusion">بحث و نتیجه‌گیری</span>
-  </div>
+  <nav class="top-nav" aria-label="بخش‌های ارائه">
+    <button type="button" id="nav-intro">مقدمه</button>
+    <button type="button" id="nav-background">پیشینه</button>
+    <button type="button" id="nav-design">طراحی</button>
+    <button type="button" id="nav-fabrication">ساخت</button>
+    <button type="button" id="nav-results">نتایج</button>
+    <button type="button" id="nav-conclusion">بحث و نتیجه‌گیری</button>
+  </nav>
 
   <!-- FOOTER -->
   <div class="footer">
@@ -912,16 +914,18 @@
   <!-- LOGOS — shared between title slide (large, bottom corners) and footer (small, bottom corners). -->
   <!-- Same elements morph between the two states; see .logos-bar rules in Retro.css and clear() in script.js -->
   <div class="logos-bar">
-    <img src="/logos/UT.png" class="logo-left" alt="دانشگاه تهران">
+    <img src="/MSc_pres/logos/UT.png" class="logo-left" alt="دانشگاه تهران">
     <div class="logo-right-group">
-      <img src="/logos/HML-2.png" class="logo-right" alt="CAST">
-      <img src="/logos/Cast_neonblue.svg" class="logo-right" alt="HML">
+      <img src="/MSc_pres/logos/HML-2.png" class="logo-right" alt="CAST">
+      <img src="/MSc_pres/logos/Cast_neonblue.svg" class="logo-right" alt="HML">
     </div>
   </div>
 
   <!-- TITLE BARS -->
   <div class="slide-title-bar"><span id="slide-title"></span></div>
   <div class="secondary-title-bar"><span id="secondary-title"></span></div>
+
+  <noscript><p>برای مشاهده اسلایدها، جاوااسکریپت مرورگر را فعال کنید.</p></noscript>
 
   <!-- THREE.JS CANVAS -->
   <canvas id="threeCanvas" style="width:100%;height:100%;display:block;"></canvas>
@@ -1277,48 +1281,6 @@
 })();
 </script>
 
-  <!-- ── Video autoplay on slide change ──────────────────────────────
-       Listens on the .reveal DOM element directly — works even when
-       Reveal is initialised as an ES-module local instance (not on
-       window.Reveal), because Reveal always dispatches its events on
-       its wrapper element regardless of how it was imported.
-       ──────────────────────────────────────────────────────────────── -->
-  <script>
-    (function () {
-      function playVideosIn(slide) {
-        if (!slide) return;
-        slide.querySelectorAll('video').forEach(function (v) {
-          v.play().catch(function () {
-            /* browser blocked autoplay — user can press play manually */
-          });
-        });
-      }
-
-      function pauseAllVideos() {
-        document.querySelectorAll('.reveal .slides video').forEach(function (v) {
-          v.pause();
-          v.currentTime = 0;
-        });
-      }
-
-      window.addEventListener('load', function () {
-        var wrapper = document.querySelector('.reveal');
-        if (!wrapper) return;
-
-        /* slidechanged fires on the wrapper element with currentSlide
-           directly on the event object (Reveal extends the DOM event). */
-        wrapper.addEventListener('slidechanged', function (event) {
-          pauseAllVideos();
-          playVideosIn(event.currentSlide);
-        });
-
-        /* ready fires once Reveal has finished initialising —
-           auto-play the video if the presentation opens on that slide. */
-        wrapper.addEventListener('ready', function (event) {
-          playVideosIn(event.currentSlide);
-        });
-      });
-    })();
-  </script>
+  <script src="/assets/js/presentation.js" defer></script>
 </body>
 </html>

@@ -8,7 +8,7 @@ Download my complete CV [here](https://drive.google.com/file/d/1-9RF-T1q85kiJM2v
 
 ## 🎓 Education
 
-- **MSc in Mechanical Engineering**, *University of Tehran* (Expected 2025)
+- **MSc in Mechanical Engineering**, *University of Tehran*
 - **BSc in Mechanical Engineering**, *Iran University of Science and Technology* (2021)  
 
 ---

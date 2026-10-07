@@ -1,0 +1,50 @@
+.portfolio-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+  gap: 15px;
+}
+.portfolio-gallery figure {
+  position: relative;
+  overflow: hidden;
+  height: 200px;
+  margin: 0;
+  border-radius: 8px;
+}
+.portfolio-gallery figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.portfolio-gallery figure:hover img { transform: scale(1.05); }
+.portfolio-gallery figcaption {
+  position: absolute;
+  inset: auto 0 0;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  font-size: 0.9rem;
+  text-align: center;
+}
+.project-list { display: grid; gap: 1.5rem; }
+.project-card { border-bottom: 1px solid var(--main-border-color); padding-bottom: 1.5rem; }
+.project-card h2 { margin-top: 0; }
+.project-card-content { display: flex; gap: 1rem; align-items: center; }
+.project-card-content p { flex: 1; margin-bottom: 0; }
+.project-card-content .img-link { flex: 0 0 150px; max-width: 35%; }
+.project-card-content img { width: 100%; height: auto; border-radius: 8px; }
+.contact-card { display: flex; gap: 1.5rem; align-items: center; }
+.contact-card ul { flex: 1; padding-left: 1.25rem; overflow-wrap: anywhere; }
+.contact-card > .img-link { flex: 0 0 250px; max-width: 100%; }
+.contact-card > .img-link img { width: 100%; border-radius: 8px; }
+@media (max-width: 600px) {
+  .contact-card { flex-direction: column; align-items: flex-start; }
+  .contact-card > .img-link { flex-basis: auto; width: 250px; }
+}
+@media (max-width: 480px) {
+  .project-card-content { align-items: flex-start; }
+  .project-card-content .img-link { flex-basis: 100px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-gallery figure img { transition: none; }
+}

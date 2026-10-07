@@ -1,0 +1,32 @@
+{
+  "label": "source-home-desktop",
+  "snapshot": {
+    "title": "Mahdi Nozari | Homepage",
+    "url": "http://127.0.0.1:9403/",
+    "frontMatter": true,
+    "sections": 0,
+    "scrollWidth": 1440,
+    "width": 1440,
+    "images": [
+      "https://morphitcdn.netlify.app/personalwebpage/images/ISME2021.JFIF"
+    ],
+    "iframes": [],
+    "videos": [],
+    "canvases": []
+  },
+  "steps": [],
+  "httpErrors": [
+    {
+      "url": "http://127.0.0.1:9403/favicon.ico",
+      "status": 404
+    }
+  ],
+  "networkFailures": [
+    {
+      "error": "net::ERR_BLOCKED_BY_ORB",
+      "type": "Image"
+    }
+  ],
+  "exceptions": [],
+  "consoleErrors": []
+}

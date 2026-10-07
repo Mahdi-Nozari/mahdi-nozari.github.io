@@ -1,0 +1,63 @@
+{
+  "label": "original-RollyPoly",
+  "snapshot": {
+    "title": "ربات چندوجهی غلتان نرم – مهدی نوذری",
+    "url": "http://127.0.0.1:9403/RollyPoly/",
+    "frontMatter": false,
+    "sections": 0,
+    "ready": false,
+    "scrollWidth": 1440,
+    "width": 1440,
+    "images": [
+      "http://127.0.0.1:9403/logos/UT.png",
+      "http://127.0.0.1:9403/logos/Cast_neonblue.svg"
+    ],
+    "iframes": [],
+    "videos": [],
+    "canvases": [
+      {
+        "id": "threeCanvas",
+        "width": 300,
+        "height": 150,
+        "visible": true
+      },
+      {
+        "id": "threeCanvasFull",
+        "width": 300,
+        "height": 150,
+        "visible": false
+      }
+    ]
+  },
+  "steps": [],
+  "httpErrors": [
+    {
+      "url": "http://127.0.0.1:9403/assets/index-vxPwyYlx.css",
+      "status": 404
+    },
+    {
+      "url": "http://127.0.0.1:9403/logos/Cast_neonblue.svg",
+      "status": 404
+    },
+    {
+      "url": "http://127.0.0.1:9403/logos/UT.png",
+      "status": 404
+    },
+    {
+      "url": "http://127.0.0.1:9403/assets/index-C7Us1EbN.js",
+      "status": 404
+    }
+  ],
+  "networkFailures": [
+    {
+      "error": "net::ERR_ABORTED",
+      "type": "Stylesheet"
+    },
+    {
+      "error": "net::ERR_ABORTED",
+      "type": "Script"
+    }
+  ],
+  "exceptions": [],
+  "consoleErrors": []
+}

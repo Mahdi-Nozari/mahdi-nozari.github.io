@@ -1,0 +1,192 @@
+{
+  "label": "rebased-MSc_pres",
+  "snapshot": {
+    "title": "ربات چندوجهی غلتان نرم – مهدی نوذری",
+    "url": "http://127.0.0.1:9403/MSc_pres/",
+    "frontMatter": false,
+    "sections": 50,
+    "ready": true,
+    "scrollWidth": 1440,
+    "width": 1440,
+    "images": [],
+    "iframes": [
+      "http://127.0.0.1:9403/MSc_pres/graphs/software_hardware_diagram.html",
+      "http://127.0.0.1:9403/MSc_pres/graphs/actuator_animation.html",
+      "http://127.0.0.1:9403/MSc_pres/graphs/control_structure_diagram.html",
+      "http://127.0.0.1:9403/MSc_pres/graphs/fsm_diagram_sync.html",
+      "http://127.0.0.1:9403/MSc_pres/graphs/system_diagram.html",
+      "http://127.0.0.1:9403/graphs/pentagon_grid.html"
+    ],
+    "videos": [
+      {
+        "src": "http://127.0.0.1:9403/media/testsetup_pres.mp4",
+        "readyState": 4
+      },
+      {
+        "src": "http://127.0.0.1:9403/media/straight_path_10x.mp4",
+        "readyState": 4
+      },
+      {
+        "src": "http://127.0.0.1:9403/media/circular_path_10x.mp4",
+        "readyState": 4
+      }
+    ],
+    "canvases": [
+      {
+        "id": "threeCanvas",
+        "width": 1440,
+        "height": 900,
+        "visible": true
+      },
+      {
+        "id": "threeCanvasFull",
+        "width": 300,
+        "height": 150,
+        "visible": false
+      }
+    ],
+    "slide": null
+  },
+  "steps": [
+    {
+      "title": "ربات چندوجهی غلتان نرم – مهدی نوذری",
+      "url": "http://127.0.0.1:9403/MSc_pres/#/49",
+      "frontMatter": false,
+      "sections": 50,
+      "ready": true,
+      "scrollWidth": 1440,
+      "width": 1440,
+      "images": [],
+      "iframes": [
+        "http://127.0.0.1:9403/MSc_pres/graphs/software_hardware_diagram.html",
+        "http://127.0.0.1:9403/MSc_pres/graphs/actuator_animation.html",
+        "http://127.0.0.1:9403/MSc_pres/graphs/control_structure_diagram.html",
+        "http://127.0.0.1:9403/MSc_pres/graphs/fsm_diagram_sync.html",
+        "http://127.0.0.1:9403/MSc_pres/graphs/system_diagram.html",
+        "http://127.0.0.1:9403/graphs/pentagon_grid.html"
+      ],
+      "videos": [
+        {
+          "src": "http://127.0.0.1:9403/media/testsetup_pres.mp4",
+          "readyState": 4
+        },
+        {
+          "src": "http://127.0.0.1:9403/media/straight_path_10x.mp4",
+          "readyState": 4
+        },
+        {
+          "src": "http://127.0.0.1:9403/media/circular_path_10x.mp4",
+          "readyState": 4
+        }
+      ],
+      "canvases": [
+        {
+          "id": "threeCanvas",
+          "width": 1440,
+          "height": 900,
+          "visible": true
+        },
+        {
+          "id": "threeCanvasFull",
+          "width": 1440,
+          "height": 688,
+          "visible": false
+        },
+        {
+          "id": "",
+          "width": 258,
+          "height": 213,
+          "visible": true
+        },
+        {
+          "id": "",
+          "width": 258,
+          "height": 213,
+          "visible": true
+        },
+        {
+          "id": "",
+          "width": 258,
+          "height": 213,
+          "visible": true
+        },
+        {
+          "id": "",
+          "width": 258,
+          "height": 213,
+          "visible": true
+        },
+        {
+          "id": "",
+          "width": 258,
+          "height": 213,
+          "visible": true
+        },
+        {
+          "id": "",
+          "width": 337,
+          "height": 213,
+          "visible": true
+        },
+        {
+          "id": "",
+          "width": 337,
+          "height": 213,
+          "visible": true
+        },
+        {
+          "id": "threeCanvasDodecahedronFSM",
+          "width": 600,
+          "height": 417,
+          "visible": false
+        },
+        {
+          "id": "threeCanvasDodecahedron",
+          "width": 1440,
+          "height": 688,
+          "visible": false
+        },
+        {
+          "id": "threeCanvasActuatorMold",
+          "width": 1440,
+          "height": 688,
+          "visible": false
+        }
+      ],
+      "slide": null
+    }
+  ],
+  "httpErrors": [],
+  "networkFailures": [
+    {
+      "error": "net::ERR_ABORTED",
+      "type": "Media"
+    },
+    {
+      "error": "net::ERR_ABORTED",
+      "type": "Media"
+    },
+    {
+      "error": "net::ERR_ABORTED",
+      "type": "Media"
+    },
+    {
+      "error": "net::ERR_ABORTED",
+      "type": "Media"
+    },
+    {
+      "error": "net::ERR_ABORTED",
+      "type": "Media"
+    },
+    {
+      "error": "net::ERR_ABORTED",
+      "type": "Media"
+    },
+    {
+      "error": "net::ERR_ABORTED",
+      "type": "Media"
+    }
+  ],
+  "exceptions": [],
+  "consoleErrors": []
+}

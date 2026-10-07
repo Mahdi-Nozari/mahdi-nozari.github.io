@@ -4,7 +4,8 @@
     {
       "label": "Run Jekyll Server",
       "type": "shell",
-      "command": "./tools/run.sh",
+      "command": "bash tools/run.sh",
+      "windows": { "command": "tools\\serve.cmd" },
       "group": {
         "kind": "build",
         "isDefault": true
@@ -15,7 +16,8 @@
     {
       "label": "Build Jekyll Site",
       "type": "shell",
-      "command": "./tools/test.sh",
+      "command": "bash tools/test.sh",
+      "windows": { "command": "tools\\test.cmd" },
       "group": {
         "kind": "build"
       },

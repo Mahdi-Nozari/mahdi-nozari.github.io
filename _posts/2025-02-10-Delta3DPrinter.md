@@ -1,6 +1,6 @@
 ---
 title: "Large Scale Delta 3D Printer"
-date: 2025-02-10 00:00:00 +0350+
+date: 2025-02-10 00:00:00 +0330
 type: "Projects"
 order: 4
 # categories: [Projects]

@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 //import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { GLTFLoader } from "https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js";
-import { DRACOLoader } from "https://unpkg.com/three@0.160.0/examples/jsm/loaders/DRACOLoader.js";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 
 import { Actuators } from './partnames.js';
 
@@ -32,7 +32,7 @@ updateCamera(); // Set correct aspect at start
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
-renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
 
 // Lighting
@@ -146,10 +146,6 @@ function resize() {
 }
 window.addEventListener('resize', resize);
 
-// Disable browser zoom
-window.addEventListener("wheel", function(e){
-    if (e.ctrlKey) e.preventDefault();
-}, { passive: false });
 
 // Optionally, update camera if the slide size changes (e.g., on window resize or Reveal.js events)
 window.addEventListener('resize', () => {

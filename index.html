@@ -2,58 +2,6 @@
 layout: page
 # Index page
 ---
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mahdi Nozari | Homepage</title>
-    <link rel="icon" href="https://morphitcdn.netlify.app/personalwebpage/images/robot-solid.SVG" type="image/x-icon">
-    <link rel="apple-touch-icon" sizes="180x180" href="https://morphitcdn.netlify.app/personalwebpage/images/robot-solid.SVG">
-    <link rel="icon" type="image/png" sizes="32x32" href="https://morphitcdn.netlify.app/personalwebpage/images/robot-solid.SVG">
-    <link rel="icon" type="image/png" sizes="16x16" href="https://morphitcdn.netlify.app/personalwebpage/images/robot-solid.SVG">
-    <style>
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-        }
-        .tile {
-            position: relative;
-            overflow: hidden;
-            height: 200px; /* Fixed height for consistency */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .tile img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Ensures images autofit while maintaining aspect ratio */
-            transition: transform 0.3s ease-in-out;
-        }
-        .tile:hover img {
-            transform: scale(1.1);
-        }
-        .overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-        }
-        .tile:hover .overlay {
-            opacity: 1;
-        }
-    </style>
-</head>
-<body>
-
     <h1>I like to explore and create...</h1>
 
     <p>
@@ -77,34 +25,32 @@ layout: page
         tangible results. Please take a look at my projects to get familiar with my expertise and my interests.
     </p>
 
+    <p><a href="{{ '/My-Projects/' | relative_url }}">Explore my projects</a>, including the <a href="{{ '/MSc_pres/' | relative_url }}">soft robot presentation</a>.</p>
+
     <h2>Gallery</h2>
-        <div class="gallery">
-        <div class="tile">
-            <img src="https://morphitcdn.netlify.app/personalwebpage/images/MahdiNozariCast.JPG" alt="Pic1">
-            <div class="overlay">CAST, University of Tehran</div>
-        </div>
-        <div class="tile">
-            <img src="https://morphitcdn.netlify.app/personalwebpage/images/MahdiNozari2.JPG" alt="Pic2">
-            <div class="overlay">Working on the SURENA V humanoid</div>
-        </div>
-        <div class="tile">
-            <img src="https://morphitcdn.netlify.app/personalwebpage/images/BScDevice3.JPG" alt="Pic3">
-            <div class="overlay">My workshop</div>
-        </div>
-        <div class="tile">
-            <img src="https://morphitcdn.netlify.app/personalwebpage/images/Desk1.JPG" alt="Pic4">
-            <div class="overlay">My 3D printers at work</div>
-        </div>
-        <div class="tile">
-            <img src="https://morphitcdn.netlify.app/personalwebpage/images/MahdiNozari3.JPG" alt="Pic5">
-            <div class="overlay">ICROM 2023 Conference</div>
-        </div>
-        <div class="tile">
-            <img src="https://morphitcdn.netlify.app/personalwebpage/images/ISME2021.JFIF" alt="Pic6">
-            <div class="overlay">ISME 2021, Won Best BSc Thesis Award </div>
-        </div>
+        <div class="portfolio-gallery">
+        <figure>
+            <img src="https://morphitcdn.netlify.app/personalwebpage/images/MahdiNozariCast.JPG" alt="Mahdi Nozari at CAST, University of Tehran" loading="lazy">
+            <figcaption>CAST, University of Tehran</figcaption>
+        </figure>
+        <figure>
+            <img src="https://morphitcdn.netlify.app/personalwebpage/images/MahdiNozari2.JPG" alt="Working on the SURENA V humanoid robot" loading="lazy">
+            <figcaption>Working on the SURENA V humanoid</figcaption>
+        </figure>
+        <figure>
+            <img src="https://morphitcdn.netlify.app/personalwebpage/images/BScDevice3.JPG" alt="Mechanical engineering workshop" loading="lazy">
+            <figcaption>My workshop</figcaption>
+        </figure>
+        <figure>
+            <img src="https://morphitcdn.netlify.app/personalwebpage/images/Desk1.JPG" alt="3D printers in the workshop" loading="lazy">
+            <figcaption>My 3D printers at work</figcaption>
+        </figure>
+        <figure>
+            <img src="https://morphitcdn.netlify.app/personalwebpage/images/MahdiNozari3.JPG" alt="ICROM 2023 conference" loading="lazy">
+            <figcaption>ICROM 2023 Conference</figcaption>
+        </figure>
+        <figure>
+            <img src="https://morphitcdn.netlify.app/personalwebpage/images/ISME2021.JPG" alt="ISME 2021 best BSc thesis award" loading="lazy">
+            <figcaption>ISME 2021, Won Best BSc Thesis Award </figcaption>
+        </figure>
     </div>
-
-
-</body>
-</html>

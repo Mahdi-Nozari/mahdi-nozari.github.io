@@ -13,7 +13,7 @@ order: 3
 - **Nozari, M.**, Yousefi-Koma, A., and Naeini, A. (2024)  
   *Control of a Biomimetic Robotic Finger Using Antagonistic Twisted and Coiled Polymer Actuators: Simulation and Experimental Validation.*  
   In **Proceedings of the 2024 12th RSI International Conference on Robotics and Mechatronics (ICRoM)**.  
-  [Link to Paper](#) *(Link coming soon)*
+  [Link to Paper](https://doi.org/10.1109/ICRoM64545.2024.10903572)
 
 - Bazrafshani, M. A., Yousefi-Koma, A., Amani, A., Maleki, B., Batmani, S., Ardakani, A. D., Taheri, S., Yazdankhah, P., **Nozari, M.**, Mozayyan, A., Naeini, A., Shafiee, M., and Vedadi, A. (2024)  
   *Surena-V: A Humanoid Robot for Human-Robot Collaboration with Optimization-based Control Architecture.*  
