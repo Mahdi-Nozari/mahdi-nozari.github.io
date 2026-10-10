@@ -1,0 +1,12 @@
+<article class="research-card" data-area="{{ include.project.area | default: 'Mechanical engineering' }}">
+  <a class="research-card-link" href="{{ include.project.url | relative_url }}">
+    <div class="research-image{% if include.project.preview_fit == 'contain' %} research-image-contain{% endif %}">
+      <img src="{{ include.project.preview | default: include.project.image | relative_url }}" alt="{{ include.project.title | escape }}" loading="lazy" decoding="async" width="720" height="540">
+    </div>
+    <div class="research-card-caption">
+      <div><p class="eyebrow">{{ include.project.area | default: 'Mechanical engineering' }}</p><h2>{{ include.label | default: include.project.title }}</h2></div>
+      <span class="card-arrow" aria-hidden="true">↗</span>
+    </div>
+  </a>
+  {% if include.details and include.project.description != '' %}<p class="research-description">{{ include.project.description }}</p>{% endif %}
+</article>

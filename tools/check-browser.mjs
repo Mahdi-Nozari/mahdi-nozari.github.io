@@ -2,7 +2,7 @@
 // No URL rewriting or npm dependencies are used.
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:http';
-import { readFile, stat, mkdir, writeFile, mkdtemp } from 'node:fs/promises';
+import { readFile, stat, mkdir, writeFile, mkdtemp, readdir } from 'node:fs/promises';
 import { resolve, join, extname, sep } from 'node:path';
 import { tmpdir } from 'node:os';
 
@@ -75,6 +75,7 @@ try {
   }
   const sleep = ms => new Promise(res => setTimeout(res, ms));
   async function run(path, label, width = 1440, height = 900, deck = false) {
+    if (process.env.BROWSER_TEST_PORTFOLIO && (deck || path.includes('Robot3D'))) return;
     if (process.env.BROWSER_TEST_FILTER && !label.includes(process.env.BROWSER_TEST_FILTER)) return;
     console.log(`Checking ${label} ...`);
     const { targetId } = await cdp('Target.createTarget', { url: 'about:blank' });
@@ -101,6 +102,7 @@ try {
       slide:window.Reveal?.getIndices().h,
       theme:!!document.querySelector('#sidebar'),
       brokenImages:[...document.images].filter(i=>i.complete && !i.naturalWidth).map(i=>i.src),
+      customLayout:!!document.querySelector('.site-header') && !!document.querySelector('.site-footer'),
       videos:[...document.querySelectorAll('video')].map(v=>({src:v.currentSrc||v.src,error:v.error?.code,readyState:v.readyState})),
       canvases:[...document.querySelectorAll('canvas')].map(c=>({id:c.id,width:c.width,height:c.height}))})`);
     const checks = [];
@@ -109,17 +111,37 @@ try {
     check('No horizontal overflow', initial.scrollWidth <= initial.width + 1);
     check('Browser zoom allowed', !/user-scalable=no|maximum-scale=1(?:\.0)?(?:,|$)/.test(initial.viewport || ''));
     check('Images load', !initial.brokenImages.length);
-    if (!deck && !path.includes('Robot3D')) check('Chirpy layout renders', initial.theme);
+    if (!deck && !path.includes('Robot3D')) check('Custom portfolio layout renders', initial.customLayout && !initial.theme);
     if (!deck && !path.includes('Robot3D')) {
       await evaluate("document.querySelectorAll('img[loading=lazy]').forEach(img=>img.loading='eager')");
       await sleep(2500);
       check('All page images load', await evaluate('[...document.images].every(img=>img.complete && img.naturalWidth>0)'));
       if (path === '/') {
-        await evaluate("document.querySelector('.portfolio-gallery').scrollIntoView()");
+        check('Three featured research projects', await evaluate("document.querySelectorAll('.selected-research .research-card').length === 3"));
+        check('Only owner images used', await evaluate("[...document.images].every(img => new URL(img.src).origin === location.origin && !img.src.includes('design-concepts'))"));
+        check('Short homepage introduction', await evaluate("document.querySelector('.hero-intro').innerText.split(/\\s+/).length < 25"));
+        await evaluate("document.querySelector('.selected-research').scrollIntoView()");
         await sleep(250);
         const gallery = await send('Page.captureScreenshot', { format: 'png' });
         await writeFile(join(output, label + '-gallery.png'), Buffer.from(gallery.data, 'base64'));
         await evaluate('scrollTo(0,0)');
+      }
+      if (width < 761) {
+        check('Mobile menu initially collapsed', await evaluate("document.querySelector('.menu-toggle').getAttribute('aria-expanded') === 'false' && getComputedStyle(document.querySelector('#primary-nav')).display === 'none'"));
+        await evaluate("document.querySelector('.menu-toggle').click()");
+        check('Mobile menu opens', await evaluate("document.querySelector('.menu-toggle').getAttribute('aria-expanded') === 'true' && getComputedStyle(document.querySelector('#primary-nav')).display !== 'none'"));
+        await send('Input.dispatchKeyEvent', {type:'keyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});
+        check('Escape closes menu', await evaluate("document.querySelector('.menu-toggle').getAttribute('aria-expanded') === 'false'"));
+      }
+      if (path === '/My-Projects/') {
+        const total = await evaluate("document.querySelectorAll('.project-collection .research-card').length");
+        check('Published project count matches listing', total > 0 && total === await evaluate("parseInt(document.querySelector('.project-count').textContent, 10)"));
+        for (const field of ['Soft robotics', 'Biomedical systems', 'Control', 'Fabrication']) {
+          await evaluate(`[...document.querySelectorAll('.filter-button')].find(button=>button.dataset.filter===${JSON.stringify(field)}).click()`);
+          check('Filter ' + field, await evaluate(`[...document.querySelectorAll('.project-collection .research-card:not([hidden])')].every(card=>card.dataset.area===${JSON.stringify(field)}) && document.querySelectorAll('.project-collection .research-card:not([hidden])').length > 0`));
+        }
+        await evaluate("document.querySelector('[data-filter=All]').click()");
+        check('All filter restores projects', await evaluate("document.querySelectorAll('.project-collection .research-card:not([hidden])').length") === total);
       }
     }
     if (deck) {
@@ -216,8 +238,16 @@ try {
   }
   await run('/', 'home-desktop');
   await run('/', 'home-mobile', 390, 844);
+  await run('/', 'home-small-phone', 320, 740);
+  await run('/', 'home-tablet', 768, 1024);
+  await run('/My-Projects/', 'projects-desktop');
   await run('/My-Projects/', 'projects-mobile', 390, 844);
   await run('/posts/MSc/', 'masters-project');
+  if (process.env.BROWSER_TEST_ALL_PROJECTS) {
+    for (const slug of await readdir(join(root, 'posts'))) {
+      await run('/posts/' + slug + '/', 'project-' + slug + '-mobile', 390, 844);
+    }
+  }
   for (const deck of ['RollyPoly', 'MSc_pres']) {
     await run(`/${deck}/#/2`, deck + '-desktop', 1440, 900, true);
     await run(`/${deck}/#/2`, deck + '-mobile', 390, 844, true);
@@ -226,6 +256,8 @@ try {
   for (const path of ['Biography', 'Publications', 'Contact-Info', 'Teams', 'Sunshine']) {
     await run(`/${path}/`, `tabs-${path}-mobile`, 390, 844);
   }
+  await run('/about/', 'about-desktop');
+  await run('/about/', 'about-mobile', 390, 844);
   const report = process.env.BROWSER_TEST_FILTER
     ? `results-${process.env.BROWSER_TEST_FILTER.replace(/[^\w-]/g, '')}.json` : 'results.json';
   await writeFile(join(output, report), JSON.stringify(results, null, 2));

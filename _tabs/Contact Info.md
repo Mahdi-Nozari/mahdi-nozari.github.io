@@ -1,6 +1,8 @@
 ---
+title: Contact
+permalink: /Contact-Info/
+eyebrow: Get in touch
 layout: page
-icon: fa-solid fa-address-book
 order: 4
 ---
 <div class="contact-card">
@@ -17,5 +19,5 @@ order: 4
         </li>
         <li><strong>🏠 Location:</strong> Tehran, Iran</li>
       </ul>
-      <img src="https://morphitcdn.netlify.app/personalwebpage/images/MahdiNozari1.JPG" alt="Mahdi Nozari" width="300">
+      <img src="/assets/images/MahdiNozari1.JPG" alt="Mahdi Nozari" width="300">
 </div>

@@ -1,53 +1,39 @@
-# Website repair and validation - 7 October 2026
+# Light portfolio redesign validation
 
-The website has been repaired locally. The public deployment has not been changed, committed, or pushed by this task.
+Validated on 2026-10-07.
 
-## Repairs
+The main portfolio now uses a custom light Jekyll layout based on concept H. Chirpy and its unused configuration, contact/share data, asset submodule and post-history hook have been removed. Superseded mockups, old audit evidence, an accidental Git-log file, and the unused root Vite cache were cleaned up. The selected H mockups remain as excluded design references; they are never used by the website.
 
-- Removed the source-root `.nojekyll` that bypassed the Jekyll build. The workflow now marks the generated artifact as static and checks that Pages uses GitHub Actions.
-- Scoped both presentation entry scripts, styles, fonts, logos, images, and embedded diagrams to `/RollyPoly/` or `/MSc_pres/`. Updated the bundle content hashes.
-- Replaced the two missing RollyPoly fabrication images with existing project photographs and corrected the gallery award-photo filename.
-- Fixed an expanding animation-frame retry queue in the geometry cards. Initialization now schedules at most one retry and stops after leaving the slide. Hidden cards stop rendering. Videos preload metadata and play only on the visible slide/fragment.
-- Preserved deep links, added keyboard-accessible section buttons and visible navigation arrows, enabled browser zoom, and added readable scrollable slide content on portrait phones.
-- Aligned the standalone viewer's Three.js imports and corrected its theme/font paths.
-- Repaired the homepage document structure, responsive gallery, project cards, contact layout, profile links, dates, and presentation links. Replaced the placeholder finger-paper URL with its verified DOI.
-- Kept three incomplete posts unpublished instead of showing empty/placeholder pages in search and recent updates. Their source files remain intact.
-- Excluded nested dependencies, unused demos/templates, and duplicate exports from publication; preserved the user's `**/node_modules` exclusion. The output is about 221 MiB rather than publishing about 440 MiB of tracked presentation exports plus dependencies.
-- Added a Gemfile.lock with Windows and Linux platforms, Windows test/preview scripts, a portable validator, and a browser regression check.
+## Preserved content and protected files
+
+- All 10 published project pages remain at their existing URLs.
+- All 3 unfinished posts remain in the repository with their existing unpublished status.
+- All 5 publications and their links remain.
+- Education, work and teaching experience, awards, skills, languages, CV links, report links, collaborators, contact information, Teams and Sunshine remain.
+- The original homepage introduction and all 6 gallery entries moved to About.
+- Compared 18 original project/tab document bodies against the saved pre-redesign inventory. Only local image URLs, a YouTube accessibility title, and whitespace differ.
+- All 368 tracked files under RollyPoly, including Robot3D, match their original SHA-256 hashes.
+- MSc_pres and the shared presentation CSS/JavaScript have no changes.
+- Retained the old favicon URL referenced by the standalone exports, avoiding a dependency on Chirpy for that file.
 
 ## Checks
 
-- Production Jekyll build: passed.
-- HTML-Proofer: 43 HTML pages, no failures.
-- Presentation resource checks: 129 references, no missing files or filename-case errors.
-- JavaScript syntax checks: nine reachable presentation scripts plus the new site/media/browser scripts, passed.
-- Browser acceptance check: 14 desktop/mobile scenarios, 182 checks, no failures. Both decks traversed every slide and fragment (55 + 50 slides), with keyboard/touch navigation, hidden-card retry regression, media, 3D models, and zero HTTP/JavaScript/console errors verified.
-- Local Windows preview: started with live reload; homepage, projects, MSc post, both decks and standalone viewer returned HTTP 200. Server stopped after testing.
-- MathJax: inspected the running thesis page; equation containers rendered successfully.
-- Bundle content hashes and `git diff --check`: passed.
+- The documented production build command, `tools/test.cmd`, passes.
+- HTML-Proofer checks 41 HTML files with no failures.
+- Portfolio validation verifies projects, drafts, publications, gallery, custom layouts and local image references.
+- Browser regression: 24 page/viewport scenarios, 321 checks, zero failures.
+- Browser coverage includes desktop, tablet, 390px and 320px phones, every published project page, all portfolio tabs, About, mobile menu/Escape behavior, project filters, image loading, horizontal overflow, zoom access, JavaScript exceptions and network errors.
+- Presentation resource checks: 129 references, zero failures; 9 presentation JavaScript files pass syntax checks.
+- The new portfolio JavaScript, retirement worker, and browser test script pass syntax checks.
+- A build with `baseurl: /preview` verifies prefixed portfolio links and images on Home, About and a project with raw Markdown links.
+- The local preview command starts successfully at http://127.0.0.1:4000/.
 
-Browser screenshots and per-page JSON reports are saved in `.test-results/browser/` (ignored by Git). The test serves the actual `_site` output, without any URL rewriting.
+The standalone slide decks and 3D viewer were not redesigned or edited. This run verifies their file integrity, resources and syntax; it does not repeat their full interactive browser suite. The existing browser suite can still run them by omitting `BROWSER_TEST_PORTFOLIO`.
 
-## External links
+## Images and artifacts
 
-Checked 89 unique external portfolio links. The CV links respond successfully and the DOI links resolve to their publisher. IEEE, LinkedIn, and ResearchGate block some automated requests; Google Scholar timed out during the automated check. These restrictions do not establish broken links, and those destinations still need a manual browser check. The live site's 404 page returned the expected HTTP 404. Details are saved in `.test-results/external-links.json`.
+Copied 40 existing portfolio image files from the original CDN. All originals remain in `assets/images/`. Smaller local WebP copies in `assets/images/previews/` reduce page transfer sizes; the preview set totals about 2.56 MB. The main site no longer relies on the external portfolio image CDN. Annotated figures use contained thumbnails to keep their labels visible.
 
-The presentations still contain large videos/models and depend on external CDN resources. This verification does not simulate a slow connection, Safari, Firefox, or GitHub's hosted Linux runner. The original Vite source projects are absent; the repaired compiled exports are checked in directly.
+Screenshots and browser reports are in `.test-results/browser/`; the temporary source inventory and preservation checks are in `.test-results/redesign/`. Test artifacts and design references are excluded from the published site.
 
-## Publish
-
-1. Set repository **Settings > Pages > Build and deployment > Source** to **GitHub Actions**.
-2. Commit and push the repairs, including the new hashed bundles and Gemfile.lock.
-3. Confirm the **Build and Deploy** workflow succeeds, then check the live homepage, project links, presentations, and model viewer.
-
-The Pages setting cannot be changed from this unauthenticated workspace. Local validation does not claim that the current live website or a future hosted workflow has already passed.
-
-## Repeat locally
-
-```bat
-tools\test.cmd
-node tools/check-browser.mjs _site
-tools\serve.cmd
-```
-
-Open http://127.0.0.1:4000/ for the local preview. See [README.md](../README.md) for setup and shell-specific environment-variable syntax. The original pre-repair findings and evidence remain in [website-audit.md](website-audit.md).
+Changes are local; no commit, push or deployment was made. The removed theme submodule entry is staged because Git tracks it as a gitlink.

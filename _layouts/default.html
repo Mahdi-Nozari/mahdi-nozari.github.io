@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="{{ site.lang | default: 'en' }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  {% seo %}
+  <link rel="icon" type="image/svg+xml" href="{{ '/assets/favicon.svg' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/site.css' | relative_url }}">
+  <script src="{{ '/assets/js/site.js' | relative_url }}" defer></script>
+</head>
+<body class="{{ page.body_class | default: 'interior' }}">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header shell">
+    <a class="wordmark" href="{{ '/' | relative_url }}" aria-label="Mahdi Nozari, home">Mahdi Nozari<span class="wordmark-dot" aria-hidden="true">.</span></a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" hidden>Menu <span aria-hidden="true">+</span></button>
+    <nav id="primary-nav" class="primary-nav" aria-label="Main navigation">
+      {% for item in site.data.navigation %}
+      <a href="{{ item.url | relative_url }}"{% if page.url == item.url or page.nav == item.key %} aria-current="page"{% endif %}>{{ item.title }}</a>
+      {% endfor %}
+      <a class="cv-link" href="{{ site.cv_url }}">CV <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+  <main id="main" class="shell" tabindex="-1">{{ content | portfolio_media }}</main>
+  <footer class="site-footer shell">
+    <span>Mahdi Nozari <span class="footer-discipline">/ Mechanical engineering &amp; robotics</span></span>
+    <nav aria-label="Contact and profiles">
+      <a href="mailto:{{ site.social.email }}">Email</a>
+      <a href="{{ site.scholar_url }}">Google Scholar</a>
+      <a href="https://github.com/{{ site.github.username }}">GitHub</a>
+      <a href="{{ '/Contact-Info/' | relative_url }}">Contact</a>
+    </nav>
+  </footer>
+</body>
+</html>

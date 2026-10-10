@@ -1,6 +1,8 @@
 ---
+title: Teams & collaboration
+permalink: /Teams/
+eyebrow: Research & community
 layout: page
-icon: fa-solid fa-people-group
 order: 5
 ---
 I have participated in various teams throughout my career and volunteer work. Below is a brief summary of each team, its purpose, and my role within it.
@@ -19,7 +21,7 @@ Due to my hands-on experience, my main role in this team is to design and build 
   In **Proceedings of the 2023 11th RSI International Conference on Robotics and Mechatronics (ICRoM)**, pp. 884–890.  
   [Link to Paper](https://doi.org/10.1109/icrom60803.2023.10412469)
 
-![Team 1](/personalwebpage/images/SURENAV1.JPG)
+![Team 1](/assets/images/SURENAV1.JPG)
 <p align="center"><i>SURENA V Humanoid Robot</i></p>
 
 ---
@@ -32,14 +34,14 @@ This team is led by Prof. Shahbazi at the Iran University of Science and Technol
 
 ## Scientific Society of Mechanical Engineering at IUST
 The SSME is a team consisting of passionate students who try to make the academic place a little more favorable. The members are volunteers, and the only goal is to help all students experience a better environment. The SSME organizes visits to industries and related laboratories, software classes, meetings with faculty and professionals, scientific competitions, and more. I am proud to have been a member for 4 years up to 2021, where I was involved with every part of the programs.
-![Team 3](/personalwebpage/images/SSMEIUST.jpg)  
+![Team 3](/assets/images/SSMEIUST.jpg)
 <p align="center"><i>Glider competition organized by the SSME</i></p>
 
 ---
 
 ## Editorial Board Of Momentum
 A quarterly scientific magazine, Momentum (Tekane), is entirely planned and written by eager mechanical engineering graduate and undergraduate students. It usually covers topics in different fields in mechanical engineering in order to familiarize students with details among various fields of work. I have written and designed infographics for the magazine and have won an award for it in an international competition.
-![Team 3](/personalwebpage/images/InforgraphicTekane.JPG)  
+![Team 3](/assets/images/InforgraphicTekane.JPG)
 <p align="center"><i>An Infographic made by me for one of the issues</i></p>
 
 ---

@@ -1,6 +1,8 @@
 ---
+title: Sunshine
+permalink: /Sunshine/
+eyebrow: A personal note
 layout: page
-icon: fa-solid fa-sun
 order: 6
 ---
 > I have dreamed of you,  

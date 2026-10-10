@@ -1,23 +1,21 @@
 ---
 layout: page
-icon: fa-solid fa-gears
+title: Research & projects
+permalink: /My-Projects/
+nav: research
 order: 2
+eyebrow: Design, build, test
+description: Here are my selected projects. Please take a look.
+wide: true
 ---
-
-Here are my selected projects. Please take a look.
-
-<div class="project-list">
-{% assign sorted_posts = site.posts | sort: 'order' %}
-{% for post in sorted_posts %}
-  {% if post.type == "Projects" %}
-    <article class="project-card">
-      <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
-      <p class="post-meta">{{ post.date | date: "%B %d, %Y" }}</p>
-      <div class="project-card-content">
-        {% if post.description %}<p>{{ post.description }}</p>{% endif %}
-        <img src="{% include media-url.html src=post.image %}" alt="{{ post.title }}">
-      </div>
-    </article>
-  {% endif %}
-{% endfor %}
+{% assign projects = site.posts | where: 'type', 'Projects' | sort: 'order' %}
+<div class="project-toolbar">
+  <div class="project-filters" role="group" aria-label="Filter projects by field" hidden>
+    {% assign areas = 'All,Soft robotics,Biomedical systems,Control,Fabrication' | split: ',' %}
+    {% for area in areas %}<button class="filter-button" type="button" data-filter="{{ area }}" aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}">{{ area }}</button>{% endfor %}
+  </div>
+  <span class="project-count" role="status" aria-live="polite">{{ projects.size }} projects</span>
+</div>
+<div class="research-grid project-collection">
+  {% for project in projects %}{% include project-card.html project=project details=true %}{% endfor %}
 </div>

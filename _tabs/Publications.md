@@ -1,6 +1,10 @@
 ---
+title: Publications
+permalink: /Publications/
+nav: publications
+eyebrow: Papers & collaboration
+body_class: publications-content
 layout: page
-icon: fa-solid fa-newspaper
 order: 3
 ---
 [My Google Scholar](https://scholar.google.com/citations?user=aUh9x3gAAAAJ&hl=en)  

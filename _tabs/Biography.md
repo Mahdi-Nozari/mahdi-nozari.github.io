@@ -1,6 +1,9 @@
 ---
+title: Experience & education
+permalink: /Biography/
+nav: experience
+eyebrow: Background
 # the default layout is 'page'
-icon: fa-solid fa-user
 order: 1
 ---
 

@@ -42,3 +42,5 @@ HTMLProofer.check_directory(
   disable_external: true,
   ignore_urls: [%r{^http://(?:127\.0\.0\.1|0\.0\.0\.0|localhost)}]
 ).run
+
+require_relative 'check-portfolio'

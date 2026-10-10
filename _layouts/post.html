@@ -1,0 +1,25 @@
+---
+layout: default
+nav: research
+---
+<article class="project-article">
+  <header class="project-heading">
+    <a class="back-link" href="{{ '/My-Projects/' | relative_url }}"><span aria-hidden="true">←</span> All research &amp; projects</a>
+    <p class="eyebrow">Research &amp; projects / {{ page.area | default: 'Mechanical engineering' }}</p>
+    <h1>{{ page.title }}</h1>
+    {% if page.description and page.description != '' %}<p class="page-intro">{{ page.description }}</p>{% endif %}
+  </header>
+  <div class="prose project-body">{{ content }}</div>
+  <nav class="project-pagination" aria-label="More projects">
+    {% assign projects = site.posts | where: 'type', 'Projects' | sort: 'order' %}
+    {% for project in projects %}
+      {% if project.url == page.url %}
+        {% assign previous_index = forloop.index0 | minus: 1 %}
+        {% assign next_index = forloop.index0 | plus: 1 %}
+        {% if previous_index >= 0 %}{% assign previous = projects[previous_index] %}<a href="{{ previous.url | relative_url }}"><span>Previous project</span>{{ previous.title }}</a>{% endif %}
+        {% if next_index < projects.size %}{% assign next = projects[next_index] %}<a href="{{ next.url | relative_url }}"><span>Next project</span>{{ next.title }}</a>{% endif %}
+      {% endif %}
+    {% endfor %}
+  </nav>
+</article>
+

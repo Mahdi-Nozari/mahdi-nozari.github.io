@@ -6,7 +6,9 @@ published: false # Unfinished project; publish after adding its content.
 order: 13
 # categories: [Projects]
 # tags: [Projects]
-image: /personalwebpage/images/TempSensorWristband.JPG
+image: /assets/images/TempSensorWristband.JPG
 description: ""
+area: Mechanical engineering
+preview: /assets/images/previews/TempSensorWristband.webp
 ---
 This study presents...

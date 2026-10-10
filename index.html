@@ -1,56 +1,23 @@
 ---
-layout: page
-# Index page
+layout: default
+title: Mahdi Nozari
+body_class: home
 ---
-    <h1>I like to explore and create...</h1>
-
-    <p>
-        I am a mechanical engineer with expertise in robotic and mechatronic systems. I have studied for my BSc at the Iran University
-         of Science and Technology (IUST) and my MSc at the University of Tehran. My research interests include control systems, robotics
-          and soft robotics, mechatronics, mechanical design, and soft sensors. My passion for research and my interest in experimental 
-          studies have always pushed me to pursue my studies with practicality in mind. I have always believed that man's ability is only
-           limited to his technologies, and my vision is to use the knowledge I have gained in my experiences to make an impact in 
-           robotic tools to make a change, however tiny.
-    </p>
-
-    <p>
-        In my professional career as a researcher, I have been a part of some of the best teams I had access to. I have been proud to
-         be a part of the Biomechatronic and Cognitive Engineering laboratory (BACE) at IUST, the Center of Advanced Systems and 
-         Technologies at the University of Tehran, and I have collaborated with the Healthcare Mechatronics laboratory at the University
-          of Leeds.
-    </p>
-
-    <p>
-        My passion to build is what defines me. I not only strive to study theory, but I am eager to use the theoretical knowledge to produce 
-        tangible results. Please take a look at my projects to get familiar with my expertise and my interests.
-    </p>
-
-    <p><a href="{{ '/My-Projects/' | relative_url }}">Explore my projects</a>, including the <a href="{{ '/MSc_pres/' | relative_url }}">soft robot presentation</a>.</p>
-
-    <h2>Gallery</h2>
-        <div class="portfolio-gallery">
-        <figure>
-            <img src="https://morphitcdn.netlify.app/personalwebpage/images/MahdiNozariCast.JPG" alt="Mahdi Nozari at CAST, University of Tehran" loading="lazy">
-            <figcaption>CAST, University of Tehran</figcaption>
-        </figure>
-        <figure>
-            <img src="https://morphitcdn.netlify.app/personalwebpage/images/MahdiNozari2.JPG" alt="Working on the SURENA V humanoid robot" loading="lazy">
-            <figcaption>Working on the SURENA V humanoid</figcaption>
-        </figure>
-        <figure>
-            <img src="https://morphitcdn.netlify.app/personalwebpage/images/BScDevice3.JPG" alt="Mechanical engineering workshop" loading="lazy">
-            <figcaption>My workshop</figcaption>
-        </figure>
-        <figure>
-            <img src="https://morphitcdn.netlify.app/personalwebpage/images/Desk1.JPG" alt="3D printers in the workshop" loading="lazy">
-            <figcaption>My 3D printers at work</figcaption>
-        </figure>
-        <figure>
-            <img src="https://morphitcdn.netlify.app/personalwebpage/images/MahdiNozari3.JPG" alt="ICROM 2023 conference" loading="lazy">
-            <figcaption>ICROM 2023 Conference</figcaption>
-        </figure>
-        <figure>
-            <img src="https://morphitcdn.netlify.app/personalwebpage/images/ISME2021.JPG" alt="ISME 2021 best BSc thesis award" loading="lazy">
-            <figcaption>ISME 2021, Won Best BSc Thesis Award </figcaption>
-        </figure>
-    </div>
+<section class="home-hero" aria-labelledby="intro-title">
+  <div class="hero-copy">
+    <h1 id="intro-title">Mahdi<br><span>Nozari</span></h1>
+    <p class="hero-discipline">Mechanical engineering · Robotics</p>
+    <span class="intro-rule" aria-hidden="true"></span>
+    <p class="hero-intro">I study robotic and mechatronic systems through mechanical design, control, and experiments.</p>
+  </div>
+  {% include research-graphic.html %}
+</section>
+<section class="selected-research" aria-labelledby="selected-title">
+  <div class="section-heading"><h2 id="selected-title">Selected research</h2><a href="{{ '/My-Projects/' | relative_url }}">All projects <span aria-hidden="true">↗</span></a></div>
+  <div class="research-grid">
+  {% for featured in site.data.featured %}
+    {% assign project = site.posts | where: 'slug', featured.slug | first %}
+    {% include project-card.html project=project label=featured.label %}
+  {% endfor %}
+  </div>
+</section>

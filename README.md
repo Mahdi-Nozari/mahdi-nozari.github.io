@@ -1,67 +1,74 @@
-# Mahdi Nozari's website
+# Mahdi Nozari's portfolio
 
-Personal portfolio at https://mahdi-nozari.github.io/, built with Jekyll and the [Chirpy theme](https://github.com/cotes2020/jekyll-theme-chirpy).
+A custom light portfolio at https://mahdi-nozari.github.io/, built with Jekyll, HTML, CSS, and a small JavaScript file. The main site follows the Research Atlas concept. Its images are Mahdi's existing photographs, CAD renders, and diagrams; generated mockups are design references only and are excluded from publishing.
 
-## Test locally on Windows
+## Preview locally on Windows
 
-Install Ruby 3.3 with Devkit, Bundler, and Python 3. From the repository directory, install the locked dependencies once:
+Install Ruby 3.3 with Devkit, Bundler, and Python 3. From this repository:
 
-```bat
+```powershell
 bundle install
+.\tools\serve.cmd
 ```
 
-Build the production website and validate its pages and presentation resources:
+Open http://127.0.0.1:4000/. The server rebuilds changes and reloads the browser. Stop it with Ctrl+C. Command Prompt also supports `tools\serve.cmd`.
 
-```bat
-tools\test.cmd
+## Test before pushing
+
+```powershell
+.\tools\test.cmd
 ```
 
-Preview the website:
+This builds the production site, checks internal links, images and scripts, verifies the project and content inventory, and validates the presentation resources. On Windows the validator uses Git for Windows' libcurl DLL if available. For other installations, set `LIBCURL_PATH` to the installed `libcurl-4.dll`.
 
-```bat
-tools\serve.cmd
-```
+For browser checks with Node.js 22+ and Edge:
 
-Open http://127.0.0.1:4000/. Stop the server with Ctrl+C. These scripts work from Command Prompt and PowerShell; in PowerShell, you can use `.\tools\test.cmd` and `.\tools\serve.cmd`.
-
-For manual commands, Command Prompt uses `set "JEKYLL_ENV=production"`; PowerShell uses `$env:JEKYLL_ENV = "production"`. Using PowerShell syntax in Command Prompt produces the filename/directory error.
-
-The Windows validator uses Git for Windows' libcurl DLL if available. If Git is installed elsewhere, set `LIBCURL_PATH` to its `libcurl-4.dll` before running the check.
-
-On Linux/macOS, use `bash tools/test.sh` and `bash tools/run.sh` after installing the dependencies and Python 3.
-
-## Browser verification
-
-After building, run the browser regression check with Node.js 22+ and Microsoft Edge:
-
-```bat
+```powershell
+$env:BROWSER_TEST_PORTFOLIO = "1"
+$env:BROWSER_TEST_ALL_PROJECTS = "1"
 node tools/check-browser.mjs _site
 ```
 
-It checks the homepage, portfolio tabs, project pages, both presentations at desktop and phone sizes, every slide and fragment, keyboard/touch navigation, media requests, JavaScript errors, and the standalone 3D viewer. It also reproduces hidden geometry-card retries to guard against browser freezes. Screenshots and JSON results are saved under `.test-results/browser/`. Set `BROWSER_PATH` to a Chrome/Edge executable if it is not installed at the default Windows path.
+This checks desktop, tablet and phone layouts, the mobile menu, every project page, filters, images, horizontal overflow, JavaScript errors and network failures. Results and screenshots are saved in `.test-results/browser/`. Set `BROWSER_PATH` for a different Chrome/Edge executable.
+
+To include the standalone slides and 3D viewer in the original browser regression suite, remove `BROWSER_TEST_PORTFOLIO`. Those files were not redesigned.
+
+On Linux/macOS use `bash tools/test.sh` and `bash tools/run.sh -p` after installing the Ruby dependencies and Python 3.
+
+## Edit the portfolio
+
+- `index.html`: short introduction and featured research.
+- `_data/featured.yml`: the three homepage project links.
+- `_data/navigation.yml`: main navigation.
+- `_posts/`: all project content, including three retained unpublished drafts.
+- `_tabs/`: research listing, publications, experience, teams, contact and Sunshine.
+- `about.html`: the original homepage introduction and six-image gallery.
+- `_layouts/` and `_includes/`: shared HTML.
+- `assets/css/site.css`: light theme and responsive layout.
+- `assets/js/site.js`: mobile navigation, project filters and retirement of the old portfolio cache.
+
+Existing URLs such as `/My-Projects/`, `/Biography/`, and `/posts/MSc/` remain valid. All ten published projects, five publications, CV links, reports, teaching, awards, skills, collaborations and the personal Sunshine page are retained.
+
+Project front matter supports `area` for filtering and `preview` for a thumbnail. The `published: false` drafts stay in the repository until their content is ready.
+
+Original portfolio images are in `assets/images/`; smaller WebP versions are in `assets/images/previews/`. The portfolio layout uses these smaller copies without modifying the originals. Keep the filename case exact. New image previews can be exported with an image editor; Pillow was used for the initial conversions. No image generation is part of the site build.
+
+The legacy favicon at `assets/img/favicons/favicon.ico` is retained because the standalone exports reference it. `sw.min.js` retires the previous Chirpy service worker and clears only its `chirpy-*` caches.
+
+## Protected standalone pages
+
+- `/RollyPoly/`: project slides.
+- `/RollyPoly/Robot3D/`: interactive robot.
+- `/MSc_pres/`: thesis presentation.
+
+RollyPoly, Robot3D, MSc_pres and their shared presentation CSS/JavaScript are unchanged by the portfolio redesign. Their compiled files and existing publication exclusions remain intact.
 
 ## Publish with GitHub Pages
 
-In this repository's **Settings > Pages > Build and deployment**, set **Source** to **GitHub Actions**. Commit and push the changes to `main` or `master`. The **Build and Deploy** workflow builds the theme, validates the output, and deploys the generated artifact. Check that both its build and deploy jobs succeed.
+In **Settings > Pages > Build and deployment**, set **Source** to **GitHub Actions**. Commit and push to `main` or `master`. The workflow builds, validates and deploys the static artifact. Keep `.nojekyll` out of the source root; the workflow creates it in the built artifact.
 
-Keep `.nojekyll` out of the source repository root. The workflow creates that marker inside the already built artifact. Branch publishing of the source bypasses the intended custom build.
-
-## Presentations
-
-- `/RollyPoly/`: project slides
-- `/MSc_pres/`: thesis presentation
-- `/RollyPoly/Robot3D/`: interactive robot model
-
-Presentation URLs are scoped to their own folders. The checked-in slides are compiled exports; their original Vite source projects are not included. Changes to an exported bundle must update its content-hashed filename and the corresponding `index.html`. If the original projects are recovered, set Vite's `base` to `/RollyPoly/` or `/MSc_pres/` before exporting again.
-
-Portrait phones show readable, scrollable slide content; desktop and landscape views retain the original presentation layout. Videos preload metadata and play only in the current slide/visible fragment. Hidden geometry cards stop rendering and retrying initialization.
-
-Unused vendor demos, dependencies, authoring templates, and duplicate exports are excluded from Jekyll publication. The presentations still rely on external MathJax, Three.js, and Draco CDN resources, and include large videos/models; loading them requires a network connection.
-
-Three unfinished posts (IPFuzzy, SolenoidEngine, TactileSensor) are kept with `published: false`. Complete their content and set `published: true` when ready.
-
-The original diagnostic findings are recorded in [tools/website-audit.md](tools/website-audit.md).
+See [validation notes](tools/website-validation.md) for the redesign checks.
 
 ## License
 
-The Chirpy starter is distributed under the [MIT license](LICENSE).
+The repository retains the original [MIT license](LICENSE) and its attribution.
